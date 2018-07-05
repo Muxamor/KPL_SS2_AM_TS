@@ -8,6 +8,7 @@
 void LL_Init(void);
 void SystemClock_Config(void);
 void SetupLED(void);
+void SetupGPIO(void);
 
 
 #ifndef NVIC_PRIORITYGROUP_0

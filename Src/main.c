@@ -41,7 +41,15 @@
 #include "SetupPeriph.h"
 #include  <stdio.h>
 
+/****************************TODO*************************
 
+1. Протестировать настройку LL_GPIO_OUTPUT_OPENDRAIN дляLED HL1, HL2, HL3
+
+2. Выяснить настройку при K1=1.
+
+
+
+**********************************************************/
 // LL_mDelay(1);
 //LL_RCC_ClocksTypeDef check_RCC_Clocks,  *CHECK_RCC_CLOCKS=&check_RCC_Clocks; // Only for check setup clock. Not need use in release
 
@@ -53,6 +61,7 @@ int main(void){
 	printf("Hello human. I am Analog module.\r\n");
 	printf("Start setup periphery STM32L452.....\r\n");
 	SetupLED(); //протестить с LL_GPIO_OUTPUT_OPENDRAIN
+	SetupGPIO();
 
 	printf("Finish setup. Success! \r\n");
 

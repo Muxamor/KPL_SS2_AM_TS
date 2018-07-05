@@ -24,3 +24,4 @@ Debug/startup
 *.idb
 *.pdb
 
+/Debug/
