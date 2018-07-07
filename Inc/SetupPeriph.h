@@ -9,7 +9,33 @@ void LL_Init(void);
 void SystemClock_Config(void);
 void SetupLED(void);
 void SetupGPIO(void);
+void USART1_Init(void);
+void SPI2_Init(void);
+void Setup_I2C(void);
+void SetupInterrupt(void);
+void MX_IWDG_Init(void);
 
+
+/*The table below gives the allowed values of the pre-emption priority and subpriority according
+ to the Priority Grouping configuration performed by NVIC_PriorityGroupConfig function
+  ============================================================================================================================
+    NVIC_PriorityGroup   | NVIC_IRQChannelPreemptionPriority | NVIC_IRQChannelSubPriority  | Description
+  ============================================================================================================================
+   NVIC_PriorityGroup_0  |                0                  |            0-15             |   0 bits for pre-emption priority
+                         |                                   |                             |   4 bits for subpriority
+  ----------------------------------------------------------------------------------------------------------------------------
+   NVIC_PriorityGroup_1  |                0-1                |            0-7              |   1 bits for pre-emption priority
+                         |                                   |                             |   3 bits for subpriority
+  ----------------------------------------------------------------------------------------------------------------------------
+   NVIC_PriorityGroup_2  |                0-3                |            0-3              |   2 bits for pre-emption priority
+                         |                                   |                             |   2 bits for subpriority
+  ----------------------------------------------------------------------------------------------------------------------------
+   NVIC_PriorityGroup_3  |                0-7                |            0-1              |   3 bits for pre-emption priority
+                         |                                   |                             |   1 bits for subpriority
+  ----------------------------------------------------------------------------------------------------------------------------
+   NVIC_PriorityGroup_4  |                 0-15              |            0                |   4 bits for pre-emption priority
+                         |                                   |                             |   0 bits for subpriority
+  ===========================================================================================================================*/
 
 #ifndef NVIC_PRIORITYGROUP_0
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,

@@ -46,23 +46,26 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_ll_usart.h"
 #include "stm32l4xx_ll_rcc.h"
-#include "main.h"
 
-/* USER CODE BEGIN Includes */
 
-/* USER CODE END Includes */
+ extern void _Error_Handler(char *, int);
 
-/* USER CODE BEGIN Private defines */
+ typedef struct{
+	 uint8_t UART_Recive_Buf[4];
+	 uint8_t UART_rec_buf_len;
+	 uint8_t UART_Transmite_Buf[4];
 
-/* USER CODE END Private defines */
+	 uint8_t recive_data; //1=Yes 0=No
+	 uint8_t addr_module;
 
-extern void _Error_Handler(char *, int);
 
-void MX_USART1_UART_Init(void);
+ }_UART1_BUF;
 
-/* USER CODE BEGIN Prototypes */
 
-/* USER CODE END Prototypes */
+
+
+
+
 
 #ifdef __cplusplus
 }

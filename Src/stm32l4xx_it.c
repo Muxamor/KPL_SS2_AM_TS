@@ -192,8 +192,45 @@ void SysTick_Handler(void)
 /**
 * @brief This function handles USART1 global interrupt.
 */
-void USART1_IRQHandler(void)
-{
+void USART1_IRQHandler(void){
+
+    uint16_t input_data9b=0;
+
+    // делаем проверку на то что принимаем байты в заисимости от режима 
+    if(LL_USART_IsActiveFlag_RXNE(USART1)){
+
+        input_data9b = LL_USART_ReceiveData9(USART1);
+
+        if((input_data9b & 0x0100) != 0){ // определяем пришли адресс или данные
+             //делаее респозноввние адреса.
+            //если адресс совпал то принимаем остальные  один или 3 байта в зависимости от режима работы 
+
+        }else{//пришли данные
+
+
+        }
+
+
+    }
+
+
+
+
+  // LL_USART_RequestRxDataFlush(USART1); -- на слуяай если не вычитываем пришедшие данные
+
+  	/*
+  	LL_USART_IsActiveFlag_RXNE(USART_TypeDef *USARTx) /// Проверяем что данные пришили
+  	RXNE
+  	: Read data register not empty
+  	This bit is set by hardware when the content
+  	of the RDR shift register has been transferred
+  	to the USART_RDR register. It is cleared by
+  	 a read to the USART_RDR register. The RXNE
+  	flag can also be cleared by writing 1 to the RXFRQ in the USART_RQR register.
+  	An interrupt is generated if RXNEIE=1 in the USART_CR1 register.
+  	0: data is not received
+  	1: Received data is ready to be read.*/
+
   /* USER CODE BEGIN USART1_IRQn 0 */
 
   /* USER CODE END USART1_IRQn 0 */

@@ -19,9 +19,8 @@
 Debug/Drivers
 Debug/Src
 Debug/startup
-*.dSYM/
 *.su
 *.idb
 *.pdb
+*.lst
 
-/Debug/
