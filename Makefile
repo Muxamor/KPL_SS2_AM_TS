@@ -6,7 +6,7 @@ TARGET = KPL_SS2_AM_TS
 
 
 # Set the FLAG OS_SYSTEM - LINUX or MAC_OS it depends which sistem are you use to build.
-BUILD_OS_SYSTEM = LINUX
+BUILD_OS_SYSTEM = MAC_OS
 
 
 ######################################
@@ -57,7 +57,7 @@ startup/startup_stm32l452xx.s
 ifeq ($(BUILD_OS_SYSTEM),LINUX)
 GCC_PATH = /opt/gcc-arm-none-eabi-7-2017-q4-major/bin
 else ifeq ($(BUILD_OS_SYSTEM),MAC_OS)
-GCC_PATH = /User/Ivan/Development/opt/gcc-arm-none-eabi-7-2018-q2-update/bin
+GCC_PATH = /Users/Ivan/Development/opt/gcc-arm-none-eabi-7-2018-q2-update/bin
 endif
 
 PREFIX = arm-none-eabi-

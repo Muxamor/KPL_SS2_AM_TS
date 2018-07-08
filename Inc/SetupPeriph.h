@@ -5,16 +5,21 @@
 #ifndef SETUPPERIPH_H_
 #define SETUPPERIPH_H_
 
+enum PWR_TIMx{
+  PWM_TIM2_CH2_PA1,
+  PWM_TIM3_CH1_PA6
+};
+
 void LL_Init(void);
 void SystemClock_Config(void);
 void SetupLED(void);
 void SetupGPIO(void);
 void USART1_Init(void);
 void SPI2_Init(void);
-void Setup_I2C(void);
+void I2C1_Init(void);
+void PWM_Init(enum PWR_TIMx timer_number);
 void SetupInterrupt(void);
 void MX_IWDG_Init(void);
-
 
 /*The table below gives the allowed values of the pre-emption priority and subpriority according
  to the Priority Grouping configuration performed by NVIC_PriorityGroupConfig function
@@ -61,7 +66,6 @@ void MX_IWDG_Init(void);
 #define LED_Green_HL3_OFF()  LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_12)
 
 
-
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -71,10 +75,5 @@ void _Error_Handler(char *, int);
 #ifdef __cplusplus
 }
 #endif
-
-
-
-
-
 
 #endif /* SETUPPERIPH_H_ */

@@ -103,6 +103,7 @@ void SystemClock_Config(void){
 	LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 	LL_SetSystemCoreClock(80000000);
 
+  /* Setup clock source for USART1 and I2C */
 	LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_SYSCLK);
 	LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_SYSCLK);
 
@@ -145,7 +146,6 @@ void SetupLED(void){
   * @retval None
 */
 void SetupGPIO(void){
-
 
 	LL_GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -218,8 +218,8 @@ void SetupGPIO(void){
 }
 
 void USART1_Init(void){
-  	LL_USART_InitTypeDef USART_InitStruct;
 
+  	LL_USART_InitTypeDef USART_InitStruct;
   	LL_GPIO_InitTypeDef GPIO_InitStruct;
 
   	/* Peripheral clock enable */
@@ -259,7 +259,20 @@ void USART1_Init(void){
 
   	LL_USART_ConfigAsyncMode(USART1); 
   	LL_USART_Enable(USART1);
-   
+
+    /* Configure pins RE and TE to control transfer data throughISO3086DW, PA11=RE PA12=DE */
+    GPIO_InitStruct.Pin = LL_GPIO_PIN_11|LL_GPIO_PIN_12;
+    GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+    GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+    LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    /**/
+    //RE -Enable when low
+    //TE - Enbale when high
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_11); //Enable receive data
+    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_12); //Enable transmit data
+
 }
 
 /**
@@ -327,7 +340,7 @@ void SPI2_Init(void){
   * @param  None
   * @retval None
 */
-void Setup_I2C(void){
+void I2C1_Init(void){
 
 	LL_I2C_InitTypeDef I2C_InitStruct;
 
@@ -368,6 +381,112 @@ void Setup_I2C(void){
   	LL_I2C_SetOwnAddress2(I2C1, 0, LL_I2C_OWNADDRESS2_NOMASK);
 }
 
+/**
+  * @brief  Setup PWM Timer2 or Timer 3.
+  * @param  None
+  * @retval None
+*/
+void PWM_Init(enum PWR_TIMx timer_number){
+
+    LL_TIM_InitTypeDef TIM_InitStruct;
+    LL_TIM_OC_InitTypeDef TIM_OC_InitStruct;
+    LL_GPIO_InitTypeDef GPIO_InitStruct;
+
+    /* Peripheral clock enable */
+    LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
+
+    if (timer_number == PWM_TIM2_CH2_PA1){
+
+        /* TIM2 clock enable */
+        LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM2);
+
+        //Setup TIM2 
+        TIM_InitStruct.Prescaler = (SystemCoreClock /1000000)-1;
+        TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+        TIM_InitStruct.Autoreload = 1000-1;
+        TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
+        LL_TIM_Init(TIM2, &TIM_InitStruct);
+
+        LL_TIM_DisableARRPreload(TIM2);
+        LL_TIM_OC_EnablePreload(TIM2, LL_TIM_CHANNEL_CH2);
+
+        TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
+        TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_DISABLE;
+        TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
+        TIM_OC_InitStruct.CompareValue = 500-1;
+        TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
+        LL_TIM_OC_Init(TIM2, LL_TIM_CHANNEL_CH2, &TIM_OC_InitStruct);
+        LL_TIM_OC_DisableFast(TIM2, LL_TIM_CHANNEL_CH2);
+
+        LL_TIM_SetOCRefClearInputSource(TIM2, LL_TIM_OCREF_CLR_INT_NC);
+        LL_TIM_DisableExternalClock(TIM2);
+        LL_TIM_ConfigETR(TIM2, LL_TIM_ETR_POLARITY_NONINVERTED, LL_TIM_ETR_PRESCALER_DIV1, LL_TIM_ETR_FILTER_FDIV1);
+        LL_TIM_SetTriggerInput(TIM2, LL_TIM_TS_ITR0);
+        LL_TIM_SetSlaveMode(TIM2, LL_TIM_SLAVEMODE_DISABLED);
+        LL_TIM_DisableIT_TRIG(TIM2);
+        LL_TIM_DisableDMAReq_TRIG(TIM2);
+        LL_TIM_SetTriggerOutput(TIM2, LL_TIM_TRGO_RESET);
+        LL_TIM_DisableMasterSlaveMode(TIM2);
+
+        //TIM2 GPIO Configuration    
+        //PA1     ------> TIM2_CH2 
+
+        GPIO_InitStruct.Pin = LL_GPIO_PIN_1;
+        GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;  
+        GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+        GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+        GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+        GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
+        LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+        LL_TIM_EnableCounter(TIM2);
+
+    } else if (timer_number == PWM_TIM3_CH1_PA6){
+     
+        /* Peripheral clock enable */
+        LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
+
+        TIM_InitStruct.Prescaler = (SystemCoreClock /1000000)-1;;
+        TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+        TIM_InitStruct.Autoreload = 1000-1;
+        TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
+        LL_TIM_Init(TIM3, &TIM_InitStruct);
+
+        LL_TIM_DisableARRPreload(TIM3);
+        LL_TIM_OC_EnablePreload(TIM3, LL_TIM_CHANNEL_CH1);
+
+        TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
+        TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_DISABLE;
+        TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
+        TIM_OC_InitStruct.CompareValue = 500-1;
+        TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
+        
+        LL_TIM_OC_Init(TIM3, LL_TIM_CHANNEL_CH1, &TIM_OC_InitStruct);
+        LL_TIM_OC_DisableFast(TIM3, LL_TIM_CHANNEL_CH1);
+        LL_TIM_SetOCRefClearInputSource(TIM3, LL_TIM_OCREF_CLR_INT_NC);
+        LL_TIM_DisableExternalClock(TIM3);
+        LL_TIM_ConfigETR(TIM3, LL_TIM_ETR_POLARITY_NONINVERTED, LL_TIM_ETR_PRESCALER_DIV1, LL_TIM_ETR_FILTER_FDIV1);
+        LL_TIM_SetTriggerInput(TIM3, LL_TIM_TS_ITR0);
+        LL_TIM_SetSlaveMode(TIM3, LL_TIM_SLAVEMODE_GATED);
+        LL_TIM_DisableIT_TRIG(TIM3);
+        LL_TIM_DisableDMAReq_TRIG(TIM3);
+        LL_TIM_SetTriggerOutput(TIM3, LL_TIM_TRGO_RESET);
+
+        LL_TIM_DisableMasterSlaveMode(TIM3);
+
+        //TIM3 GPIO Configuration    
+        //PA6     ------> TIM3_CH1 
+        GPIO_InitStruct.Pin = LL_GPIO_PIN_6;
+        GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+        GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+        GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+        GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+        GPIO_InitStruct.Alternate = LL_GPIO_AF_2;
+        LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+        LL_TIM_EnableCounter(TIM3);
+    }
+
+}
 
 /**
   * @brief  This function setup interrupts for all ports and inside event .
@@ -382,10 +501,7 @@ void SetupInterrupt(void){
   	//LL_USART_DisableIT_RXNE(USART1);
   	NVIC_EnableIRQ(USART1_IRQn);
 
-
-
 }
-
 
 
 /**
@@ -395,14 +511,14 @@ void SetupInterrupt(void){
 
 void MX_IWDG_Init(void){
 
-  	LL_IWDG_Enable(IWDG);
+    LL_IWDG_Enable(IWDG);
   	LL_IWDG_EnableWriteAccess(IWDG);
-	LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_32);
-	LL_IWDG_SetWindow(IWDG, 4095);
-	LL_IWDG_SetReloadCounter(IWDG, 4095);
-	while (LL_IWDG_IsReady(IWDG) != 1);
+    LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_32);
+    LL_IWDG_SetWindow(IWDG, 4095);
+    LL_IWDG_SetReloadCounter(IWDG, 4095);
+    while (LL_IWDG_IsReady(IWDG) != 1);
 
-	LL_IWDG_ReloadCounter(IWDG);
+    LL_IWDG_ReloadCounter(IWDG);
 }
 
 /**

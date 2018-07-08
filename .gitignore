@@ -1,7 +1,6 @@
 # Prerequisites
 *.d
-
-# Linker output
+*.o
 *.ilk
 *.map
 *.exp

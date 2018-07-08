@@ -13,7 +13,7 @@
 
 
 **********************************************************/
-// LL_mDelay(1);
+//LL_mDelay(1);
 //LL_RCC_ClocksTypeDef check_RCC_Clocks,  *CHECK_RCC_CLOCKS=&check_RCC_Clocks; // Only for check setup clock. Not need use in release
 
 int main(void){
@@ -27,7 +27,8 @@ int main(void){
 	SetupGPIO();
 	USART1_Init();
 	SPI2_Init();
-	Setup_I2C();
+	I2C1_Init();
+	PWM_Init(PWM_TIM2_CH2_PA1);
 
 	SetupInterrupt();
 

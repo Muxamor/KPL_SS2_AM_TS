@@ -91,7 +91,7 @@
 
 /* USER CODE END Private defines */
 
-
+extern void _Error_Handler(char *, int);
 
 #endif /* __MAIN_H__ */
 
