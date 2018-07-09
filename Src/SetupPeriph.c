@@ -397,92 +397,71 @@ void PWM_Init(enum PWR_TIMx timer_number){
 
     if (timer_number == PWM_TIM2_CH2_PA1){
 
-        /* TIM2 clock enable */
-        LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM2);
+    	//Setup GPIO TIM2_CH2 ------> PA1
+    	GPIO_InitStruct.Pin = LL_GPIO_PIN_1;
+    	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+    	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+    	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+    	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+    	GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
+    	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-        //Setup TIM2 
-        TIM_InitStruct.Prescaler = (SystemCoreClock /1000000)-1;
-        TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-        TIM_InitStruct.Autoreload = 1000-1;
-        TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
-        LL_TIM_Init(TIM2, &TIM_InitStruct);
+    	/* TIM2 clock enable */
+    	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM2);
 
-        LL_TIM_DisableARRPreload(TIM2);
-        LL_TIM_OC_EnablePreload(TIM2, LL_TIM_CHANNEL_CH2);
+    	LL_TIM_StructInit(&TIM_InitStruct);
+    	TIM_InitStruct.Prescaler = (SystemCoreClock/1000000)-1;
+    	TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+    	TIM_InitStruct.Autoreload = 1000-1;
+    	TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
+    	LL_TIM_Init(TIM2, &TIM_InitStruct);
 
-        TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
-        TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_DISABLE;
-        TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
-        TIM_OC_InitStruct.CompareValue = 500-1;
-        TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
-        LL_TIM_OC_Init(TIM2, LL_TIM_CHANNEL_CH2, &TIM_OC_InitStruct);
-        LL_TIM_OC_DisableFast(TIM2, LL_TIM_CHANNEL_CH2);
+    	LL_TIM_SetClockSource(TIM2, LL_TIM_CLOCKSOURCE_INTERNAL);
+    	LL_TIM_OC_EnablePreload(TIM2, LL_TIM_CHANNEL_CH2);
 
-        LL_TIM_SetOCRefClearInputSource(TIM2, LL_TIM_OCREF_CLR_INT_NC);
-        LL_TIM_DisableExternalClock(TIM2);
-        LL_TIM_ConfigETR(TIM2, LL_TIM_ETR_POLARITY_NONINVERTED, LL_TIM_ETR_PRESCALER_DIV1, LL_TIM_ETR_FILTER_FDIV1);
-        LL_TIM_SetTriggerInput(TIM2, LL_TIM_TS_ITR0);
-        LL_TIM_SetSlaveMode(TIM2, LL_TIM_SLAVEMODE_DISABLED);
-        LL_TIM_DisableIT_TRIG(TIM2);
-        LL_TIM_DisableDMAReq_TRIG(TIM2);
-        LL_TIM_SetTriggerOutput(TIM2, LL_TIM_TRGO_RESET);
-        LL_TIM_DisableMasterSlaveMode(TIM2);
+    	LL_TIM_OC_StructInit(&TIM_OC_InitStruct);
+    	TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
+    	TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_ENABLE;
+    	TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
+    	TIM_OC_InitStruct.CompareValue = 500-1;
+    	TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
+    	LL_TIM_OC_Init(TIM2, LL_TIM_CHANNEL_CH2, &TIM_OC_InitStruct);
 
-        //TIM2 GPIO Configuration    
-        //PA1     ------> TIM2_CH2 
-
-        GPIO_InitStruct.Pin = LL_GPIO_PIN_1;
-        GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;  
-        GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-        GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-        GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-        GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
-        LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-        LL_TIM_EnableCounter(TIM2);
+    	LL_TIM_EnableCounter(TIM2);
 
     } else if (timer_number == PWM_TIM3_CH1_PA6){
+
+    	//Setup GPIO TIM3_CH1 ------> PA6
+    	GPIO_InitStruct.Pin = LL_GPIO_PIN_6;
+    	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+    	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+    	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+    	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+    	GPIO_InitStruct.Alternate = LL_GPIO_AF_2;
+    	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    	LL_TIM_EnableCounter(TIM3);
      
-        /* Peripheral clock enable */
-        LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
+    	/* TIM2 clock enable */
+    	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
 
-        TIM_InitStruct.Prescaler = (SystemCoreClock /1000000)-1;;
-        TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-        TIM_InitStruct.Autoreload = 1000-1;
-        TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
-        LL_TIM_Init(TIM3, &TIM_InitStruct);
+    	LL_TIM_StructInit(&TIM_InitStruct);
+    	TIM_InitStruct.Prescaler = (SystemCoreClock/1000000)-1;;
+    	TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+    	TIM_InitStruct.Autoreload = 1000-1;
+    	TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
+    	LL_TIM_Init(TIM3, &TIM_InitStruct);
 
-        LL_TIM_DisableARRPreload(TIM3);
+        LL_TIM_SetClockSource(TIM3, LL_TIM_CLOCKSOURCE_INTERNAL);
         LL_TIM_OC_EnablePreload(TIM3, LL_TIM_CHANNEL_CH1);
 
+        LL_TIM_OC_StructInit(&TIM_OC_InitStruct);
         TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
-        TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_DISABLE;
+        TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_ENABLE;
         TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
         TIM_OC_InitStruct.CompareValue = 500-1;
         TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
-        
         LL_TIM_OC_Init(TIM3, LL_TIM_CHANNEL_CH1, &TIM_OC_InitStruct);
-        LL_TIM_OC_DisableFast(TIM3, LL_TIM_CHANNEL_CH1);
-        LL_TIM_SetOCRefClearInputSource(TIM3, LL_TIM_OCREF_CLR_INT_NC);
-        LL_TIM_DisableExternalClock(TIM3);
-        LL_TIM_ConfigETR(TIM3, LL_TIM_ETR_POLARITY_NONINVERTED, LL_TIM_ETR_PRESCALER_DIV1, LL_TIM_ETR_FILTER_FDIV1);
-        LL_TIM_SetTriggerInput(TIM3, LL_TIM_TS_ITR0);
-        LL_TIM_SetSlaveMode(TIM3, LL_TIM_SLAVEMODE_GATED);
-        LL_TIM_DisableIT_TRIG(TIM3);
-        LL_TIM_DisableDMAReq_TRIG(TIM3);
-        LL_TIM_SetTriggerOutput(TIM3, LL_TIM_TRGO_RESET);
 
-        LL_TIM_DisableMasterSlaveMode(TIM3);
-
-        //TIM3 GPIO Configuration    
-        //PA6     ------> TIM3_CH1 
-        GPIO_InitStruct.Pin = LL_GPIO_PIN_6;
-        GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-        GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-        GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-        GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-        GPIO_InitStruct.Alternate = LL_GPIO_AF_2;
-        LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
         LL_TIM_EnableCounter(TIM3);
     }
 

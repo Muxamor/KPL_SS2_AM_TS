@@ -29,6 +29,7 @@ int main(void){
 	SPI2_Init();
 	I2C1_Init();
 	PWM_Init(PWM_TIM2_CH2_PA1);
+	//PWM_Init(PWM_TIM3_CH1_PA6);
 
 	SetupInterrupt();
 
