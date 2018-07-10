@@ -439,8 +439,7 @@ void PWM_Init(enum PWR_TIMx timer_number){
     	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
     	GPIO_InitStruct.Alternate = LL_GPIO_AF_2;
     	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    	LL_TIM_EnableCounter(TIM3);
-     
+
     	/* TIM2 clock enable */
     	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
 
