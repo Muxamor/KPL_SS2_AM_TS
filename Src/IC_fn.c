@@ -28,14 +28,6 @@ ErrorStatus Set_Ficlk(uint8_t par_value, enum PWR_TIMx timer_number){
 	}else if(Fcut>=1270){
 		Ficlk=130000;//Hz
 	}else{
-		//i = Fcut%50;
-
-		//if( i==0 ){
-			//(Fcut<1000) ?  (Fcut=Fcut+5) : (Fcut=Fcut+50);
-		//}
-
-		//Ficlk = Fcut*100;
-
 		Ficlk = ( ((Fcut%50)==0) ? ((Fcut<1000) ? (Fcut=Fcut+5) : (Fcut=Fcut+50)) : Fcut )*100;
 	}
 

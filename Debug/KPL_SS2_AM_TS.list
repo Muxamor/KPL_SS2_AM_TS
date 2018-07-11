@@ -29,13 +29,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_ranges 000009c8  00000000  00000000  0002c7d0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_line   00003ed6  00000000  00000000  0002d198  2**0
+ 13 .debug_line   00003ed4  00000000  00000000  0002d198  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    00002ebf  00000000  00000000  0003106e  2**0
+ 14 .debug_str    00002ebf  00000000  00000000  0003106c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .comment      0000007c  00000000  00000000  00033f2d  2**0
+ 15 .comment      0000007c  00000000  00000000  00033f2b  2**0
                   CONTENTS, READONLY
- 16 .debug_frame  00003308  00000000  00000000  00033fac  2**2
+ 16 .debug_frame  00003308  00000000  00000000  00033fa8  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -4280,11 +4280,7 @@ ErrorStatus Set_Ficlk(uint8_t par_value, enum PWR_TIMx timer_number){
  8001988:	4b3a      	ldr	r3, [pc, #232]	; (8001a74 <Set_Ficlk+0x120>)
  800198a:	613b      	str	r3, [r7, #16]
  800198c:	e023      	b.n	80019d6 <Set_Ficlk+0x82>
-			//(Fcut<1000) ?  (Fcut=Fcut+5) : (Fcut=Fcut+50);
-		//}
-
-		//Ficlk = Fcut*100;
-
+	}else{
 		Ficlk = ( ((Fcut%50)==0) ? ((Fcut<1000) ? (Fcut=Fcut+5) : (Fcut=Fcut+50)) : Fcut )*100;
  800198e:	697a      	ldr	r2, [r7, #20]
  8001990:	4b39      	ldr	r3, [pc, #228]	; (8001a78 <Set_Ficlk+0x124>)
