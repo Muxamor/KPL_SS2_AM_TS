@@ -19,7 +19,7 @@ OPT = -Og
 
 
 #######################################
-# paths
+# pathsSrc/syscalls.c \
 #######################################
 # Build path
 BUILD_DIR = Build_gcc_eabi
@@ -34,6 +34,7 @@ Src/SetupPeriph.c \
 Src/usart.c \
 Src/stm32l4xx_it.c \
 Src/syscalls.c \
+Src/IC_fn.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_dma.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_exti.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.c \

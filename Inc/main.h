@@ -41,6 +41,9 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+
+
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx.h"
 #include "stm32l4xx_ll_i2c.h"

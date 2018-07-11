@@ -1,9 +1,14 @@
-/*
- * SetupPeriph.c
- *
- *  Created on: Jun 30, 2018
- *      Author: muxamor
- */
+/**
+  ******************************************************************************
+  * @author  Ivan Neskorodev
+  * @Emil    ivan.neskorodev@gmail.com
+  * @version V0.0
+  * @date    09.07.2018
+  * @brief   Function for work with IC on the SS board
+  *
+  *
+  ******************************************************************************
+*/
 
 #include "stm32l4xx.h"
 #include "SetupPeriph.h"
@@ -215,6 +220,15 @@ void SetupGPIO(void){
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+
+	////////удалить только для отладки на NUcleo board
+
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+
 }
 
 void USART1_Init(void){
@@ -410,9 +424,9 @@ void PWM_Init(enum PWR_TIMx timer_number){
     	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM2);
 
     	LL_TIM_StructInit(&TIM_InitStruct);
-    	TIM_InitStruct.Prescaler = (SystemCoreClock/1000000)-1;
+    	TIM_InitStruct.Prescaler = 0;//(SystemCoreClock/1000000)-1;
     	TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-    	TIM_InitStruct.Autoreload = 1000-1;
+    	TIM_InitStruct.Autoreload = 61538-1;
     	TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
     	LL_TIM_Init(TIM2, &TIM_InitStruct);
 
@@ -423,7 +437,7 @@ void PWM_Init(enum PWR_TIMx timer_number){
     	TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
     	TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_ENABLE;
     	TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
-    	TIM_OC_InitStruct.CompareValue = 500-1;
+    	TIM_OC_InitStruct.CompareValue = 30769-1;
     	TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
     	LL_TIM_OC_Init(TIM2, LL_TIM_CHANNEL_CH2, &TIM_OC_InitStruct);
 
@@ -444,9 +458,9 @@ void PWM_Init(enum PWR_TIMx timer_number){
     	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
 
     	LL_TIM_StructInit(&TIM_InitStruct);
-    	TIM_InitStruct.Prescaler = (SystemCoreClock/1000000)-1;;
+    	TIM_InitStruct.Prescaler = 0;//(SystemCoreClock/1000000)-1;;
     	TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-    	TIM_InitStruct.Autoreload = 1000-1;
+    	TIM_InitStruct.Autoreload = 61538-1;
     	TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
     	LL_TIM_Init(TIM3, &TIM_InitStruct);
 
@@ -457,7 +471,7 @@ void PWM_Init(enum PWR_TIMx timer_number){
         TIM_OC_InitStruct.OCMode = LL_TIM_OCMODE_PWM1;
         TIM_OC_InitStruct.OCState = LL_TIM_OCSTATE_ENABLE;
         TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
-        TIM_OC_InitStruct.CompareValue = 500-1;
+        TIM_OC_InitStruct.CompareValue = 30769-1;
         TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
         LL_TIM_OC_Init(TIM3, LL_TIM_CHANNEL_CH1, &TIM_OC_InitStruct);
 
