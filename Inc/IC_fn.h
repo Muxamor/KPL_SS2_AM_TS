@@ -10,7 +10,12 @@
 
  extern void _Error_Handler(char *, int);
 
- ErrorStatus Set_Ficlk(uint8_t par_value, enum PWR_TIMx timer_number);
+ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number);
+
+
+
+
+
 
 
 

@@ -58,14 +58,22 @@ void MX_IWDG_Init(void);
 #endif
 
 /*For ON/OFF LED need to use:                                        */
-#define LED_Yellow_HL1_ON()  LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_10)
-#define LED_Yellow_HL1_OFF() LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_10)
+#define LED_Yellow_HL1_ON()		LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_10)
+#define LED_Yellow_HL1_OFF() 	LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_10)
 
-#define LED_Green_HL2_ON()   LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_11)
-#define LED_Green_HL2_OFF()  LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_11)
+#define LED_Green_HL2_ON()   	LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_11)
+#define LED_Green_HL2_OFF()  	LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_11)
 
-#define LED_Green_HL3_ON()   LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_12)
-#define LED_Green_HL3_OFF()  LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_12)
+#define LED_Green_HL3_ON()   	LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_12)
+#define LED_Green_HL3_OFF()  	LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_12)
+
+/*For Set/Reset F_SAx need to use:                                 */
+#define F_SA0_Set()				LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_8)
+#define F_SA0_Reset()			LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_8)
+#define F_SA1_Set()				LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9)
+#define F_SA1_Reset()			LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9)
+#define F_SA2_Set()				LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8)
+#define F_SA2_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_8)
 
 
 #ifdef __cplusplus

@@ -7,19 +7,20 @@
 
 
 #include "stm32l4xx.h"
+#include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_tim.h"
 #include "SetupPeriph.h"
 #include "IC_fn.h"
-#include "stm32l4xx_ll_tim.h"
+
 
 #include  <stdio.h>
 
 
-ErrorStatus Set_Ficlk(uint8_t par_value, enum PWR_TIMx timer_number){
+ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 
 	uint32_t Counter_TIM_Value, Fcut, Ficlk;
 	//Fcut -  cutoff frequency of low-pass filter (Hz)
 	//Ficlkt -  real value of the frequency fed to the low-pass filter (Hz)
-
 
 	Fcut=par_value*10;// cutoff frequency of low-pass filter (Hz)
 
@@ -28,7 +29,8 @@ ErrorStatus Set_Ficlk(uint8_t par_value, enum PWR_TIMx timer_number){
 	}else if(Fcut>=1270){
 		Ficlk=130000;//Hz
 	}else{
-		Ficlk = ( ((Fcut%50)==0) ? ((Fcut<1000) ? (Fcut=Fcut+5) : (Fcut=Fcut+50)) : Fcut )*100;
+		//Ficlk = ( ((Fcut%50)==0) ? ((Fcut<1000) ? (Fcut=Fcut+5) : (Fcut=Fcut+50)) : Fcut )*100;
+		Ficlk = ( ((Fcut%50)==0) ? (Fcut=Fcut+5): Fcut )*100;
 	}
 
 	Counter_TIM_Value = SystemCoreClock/Ficlk;
@@ -50,6 +52,18 @@ ErrorStatus Set_Ficlk(uint8_t par_value, enum PWR_TIMx timer_number){
 	}else{
 		return ERROR;
 		Error_Handler();
+	}
+
+    // Control F_SAx
+	if( Fcut==10 || Fcut==20 ){
+		F_SA0_Reset();
+		F_SA1_Reset();
+	}else if ( Fcut > 20 && Fcut < 330 ){
+		F_SA0_Set();
+		F_SA1_Reset();
+	}else if( Fcut >= 330 ){
+		F_SA0_Reset();
+		F_SA1_Set();
 	}
 
 #ifdef DEBUGprintf

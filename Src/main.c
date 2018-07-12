@@ -38,15 +38,12 @@ int main(void){
 	I2C1_Init();
 	PWM_Init(PWM_TIM2_CH2_PA1);
 	//PWM_Init(PWM_TIM3_CH1_PA6);
+	//SetupInterrupt();
 
+	//MX_IWDG_Init();
 
+	printf("Finish setup periphery. Success! \r\n");
 
-
-
-//	Set_Ficlk(245, PWM_TIM2_CH2_PA1);
-	//Set_Ficlk(100, PWM_TIM2_CH2_PA1);
-//	Set_Ficlk(50, PWM_TIM2_CH2_PA1);
-//	Set_Ficlk(51, PWM_TIM2_CH2_PA1);
 	while(1){
 
 		pin=LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_13);
@@ -57,18 +54,16 @@ int main(void){
 			};
 
 			i++;
-			Set_Ficlk(i, PWM_TIM2_CH2_PA1);
+			Set_Ficlk_and_F_SAx(i, PWM_TIM2_CH2_PA1);
 			if(i==130){
 				i=0;
 			}
 		}
 	}
 
-	SetupInterrupt();
 
-	//MX_IWDG_Init();
 
-	printf("Finish setup. Success! \r\n");
+	
 
 
 while(1){

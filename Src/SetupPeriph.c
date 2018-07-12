@@ -23,9 +23,10 @@
 #include "stm32l4xx_ll_bus.h"
 #include "stm32l4xx_ll_exti.h"
 #include "stm32l4xx_ll_spi.h"
+#include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_tim.h"
 #include "stm32l4xx_ll_usart.h"
-#include "stm32l4xx_ll_gpio.h"
+
 #include  <stdio.h>
 
 //#include "stm32l4xx_ll_dma.h"
@@ -197,9 +198,16 @@ void SetupGPIO(void){
 	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
 	/*off F_SA*/
-	LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_8|LL_GPIO_PIN_9);
+	LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_8|LL_GPIO_PIN_9);
 	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8);
+
+	/*For ON/OFF LED need to use function:   		*/
+	/*F_SA0_Set()       F_SA0_Reset()            	*/
+	/*F_SA1_Set()       F_SA1_Reset()          		*/
+	/*F_SA2_Set()       F_SA2_Reset()               */
+	/*Define in SetupPeriph.h                       */
 
 
 	/* Configure pins for control main amplifier K2. out: PB0=G0 PB1=G1 PB2=G2 PB10=G3 PB11=G4  in: COMP4=PA2   */
