@@ -171,6 +171,13 @@ void SetupGPIO(void){
 	/*off K1 */
 	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_5);
 
+	/*For setup K1 need use:   		                */
+	/*PA3_10_Set()      PA3_10_Reset()            	*/
+	/*PA4_100_Set()     PA4_100_Reset()          	*/
+	/*PA5_1000_Set()    PA5_1000_Reset()            */
+	/*Define in SetupPeriph.h                       */
+
+
 
 	/* Configure pins in for control COMPorators COMP1=PC0, COMP2=PC1, COMP3=PA0*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1;
@@ -203,7 +210,7 @@ void SetupGPIO(void){
 	LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_8|LL_GPIO_PIN_9);
 	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8);
 
-	/*For ON/OFF LED need to use function:   		*/
+	/*For SA0, SA1, SA2 need use:   		        */
 	/*F_SA0_Set()       F_SA0_Reset()            	*/
 	/*F_SA1_Set()       F_SA1_Reset()          		*/
 	/*F_SA2_Set()       F_SA2_Reset()               */
@@ -227,6 +234,14 @@ void SetupGPIO(void){
 	//GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	/*For setup K2 need use:   		                */
+	/*PB0_G0_Set()      PB0_G0_Reset()            	*/
+	/*PB1_G1_Set()      PB1_G1_Reset()          	*/
+	/*PB2_G2_Set()      PB2_G2_Reset()              */
+	/*PB10_G3_Set()     PB10_G3_Reset()             */
+	/*PB11_G4_Set()     PB11_G4_Reset()             */
+	/*Define in SetupPeriph.h                       */
 
 
 	////////удалить только для отладки на NUcleo board

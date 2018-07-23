@@ -12,10 +12,16 @@
 #include "SetupPeriph.h"
 #include "IC_fn.h"
 
-
 #include  <stdio.h>
 
-
+/**
+  * @brief  Setup Ficlk and F_SAx settings cutoff frequency of low-pass filter
+  * @param  Parametr value
+  * @param  PWM_TIM2_CH2_PA1 or PWM_TIM3_CH1_PA6
+  * @retval An ErrorStatus enumeration
+  *          - SUCCESS: GPIO registers are initialized according to GPIO_InitStruct content
+  *          - ERROR:   Not applicable
+  */
 ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 
 	uint32_t Counter_TIM_Value, Fcut, Ficlk;
@@ -50,27 +56,214 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 		//LL_TIM_OC_EnablePreload(TIM2, LL_TIM_CHANNEL_CH2);
 		LL_TIM_EnableCounter(TIM3);
 	}else{
-		return ERROR;
 		Error_Handler();
+		return ERROR;
 	}
 
     // Control F_SAx
 	if( Fcut==10 || Fcut==20 ){
 		F_SA0_Reset();
 		F_SA1_Reset();
+#ifdef DEBUGprintf
+			printf("Param_value=%d  Fcut=%luHz  Ficlk=%luHz  F_SA0=0 F_SA1=0\r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
+#endif
+
 	}else if ( Fcut > 20 && Fcut < 330 ){
 		F_SA0_Set();
 		F_SA1_Reset();
+#ifdef DEBUGprintf
+			printf("Param_value=%d  Fcut=%luHz  Ficlk=%luHz  F_SA0=1 F_SA1=0\r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
+#endif
+
 	}else if( Fcut >= 330 ){
 		F_SA0_Reset();
 		F_SA1_Set();
+#ifdef DEBUGprintf
+			printf("Param_value=%d  Fcut=%luHz  Ficlk=%luHz  F_SA0=0 F_SA1=1\r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
+#endif
+
+	}
+
+	return SUCCESS;
+}
+
+/**
+  * @brief  Setup amplification factor K1
+  * @param  namber_value
+  * @retval An ErrorStatus enumeration
+  *          - SUCCESS: GPIO registers are initialized according to GPIO_InitStruct content
+  *          - ERROR:   Not applicable
+  */
+ErrorStatus Set_Amp_Factor_K1(uint8_t namber_value){
+
+	uint16_t K1=0;
+
+	switch(namber_value){
+		case 0: // Set K1=1
+			PA3_10_Set();
+			PA4_100_Set();
+			PA5_1000_Set();
+			K1=1;
+			break;
+		case 1:// Set K1=10
+			PA3_10_Reset();
+			PA4_100_Set();
+			PA5_1000_Set();
+			K1=10;
+			break;
+		case 2:// Set K1=100
+			PA3_10_Set();
+			PA4_100_Reset();
+			PA5_1000_Set();
+			K1=100;
+			break;
+		case 3:// Set K1=1000
+			PA3_10_Set();
+			PA4_100_Set();
+			PA5_1000_Reset();
+			K1=1000;
+			break;
+		default:
+			Error_Handler();
+			return ERROR;
 	}
 
 #ifdef DEBUGprintf
-	printf("Param_value=%d Fcut=%lu Ficlk=%lu \r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
+	printf("K1 = %d \r\n",K1);
 #endif
 
 	return SUCCESS;
 }
 
+/**
+  * @brief  Setup amplification factor K2
+  * @param  namber_value
+  * @retval An ErrorStatus enumeration
+  *          - SUCCESS: GPIO registers are initialized according to GPIO_InitStruct content
+  *          - ERROR:   Not applicable
+  */
+ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 
+	uint16_t K2=0;
+
+	switch(namber_value){
+
+		case 0: // Set K2=1
+			PB0_G0_Reset();
+			PB1_G1_Reset();
+			PB2_G2_Reset();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=1;
+			break;
+		case 1: // Set K2=2
+			PB0_G0_Set();
+			PB1_G1_Reset();
+			PB2_G2_Reset();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=2;
+			break;
+		case 2: // Set K2=4
+			PB0_G0_Reset();
+			PB1_G1_Set();
+			PB2_G2_Reset();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=4;
+			break;
+		case 3: // Set K2=8
+			PB0_G0_Set();
+			PB1_G1_Set();
+			PB2_G2_Reset();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=8;
+			break;
+		case 4: // Set K2=16
+			PB0_G0_Reset();
+			PB1_G1_Reset();
+			PB2_G2_Set();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=16;
+			break;
+		case 5: // Set K2=32
+			PB0_G0_Set();
+			PB1_G1_Reset();
+			PB2_G2_Set();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=32;
+			break;
+		case 6: // Set K2=64
+			PB0_G0_Reset();
+			PB1_G1_Set();
+			PB2_G2_Set();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=64;
+			break;
+		case 7: // Set K2=128
+			PB0_G0_Set();
+			PB1_G1_Set();
+			PB2_G2_Set();
+			PB10_G3_Reset();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=128;
+			break;
+		case 8: // Set K2=256
+			PB0_G0_Reset();
+			PB1_G1_Reset();
+			PB2_G2_Reset();
+			PB10_G3_Set();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=256;
+			break;
+		case 9: // Set K2=512
+			PB0_G0_Set();
+			PB1_G1_Reset();
+			PB2_G2_Reset();
+			PB10_G3_Set();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=512;
+			break;
+		case 10: // Set K2=1024
+			PB0_G0_Reset();
+			PB1_G1_Set();
+			PB2_G2_Reset();
+			PB10_G3_Set();
+			PB11_G4_Reset();
+			F_SA2_Set();
+			K2=1024;
+			break;
+		case 11: // Set K2=2048
+			PB0_G0_Reset();
+			PB1_G1_Set();
+			PB2_G2_Reset();
+			PB10_G3_Set();
+			PB11_G4_Reset();
+			F_SA2_Reset();
+			K2=2048;
+			break;
+		default:
+			Error_Handler();
+			return ERROR;
+	}
+
+#ifdef DEBUGprintf
+	printf("K2 = %d \r\n",K2);
+#endif
+
+	return SUCCESS;
+}

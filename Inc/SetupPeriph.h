@@ -5,7 +5,7 @@
 #ifndef SETUPPERIPH_H_
 #define SETUPPERIPH_H_
 
-#define DEBUGprintf // Enable printf message  to SWO
+#define DEBUGprintf // Enable printf() message  to SWO
 
 enum PWR_TIMx{
   PWM_TIM2_CH2_PA1,
@@ -57,7 +57,7 @@ void MX_IWDG_Init(void);
                                                                  0 bit  for subpriority */
 #endif
 
-/*For ON/OFF LED need to use:                                        */
+/*For ON/OFF LED need to use:                                             */
 #define LED_Yellow_HL1_ON()		LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_10)
 #define LED_Yellow_HL1_OFF() 	LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_10)
 
@@ -67,13 +67,34 @@ void MX_IWDG_Init(void);
 #define LED_Green_HL3_ON()   	LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_12)
 #define LED_Green_HL3_OFF()  	LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_12)
 
-/*For Set/Reset F_SAx need to use:                                 */
+/*For Set/Reset F_SAx need to use:                                        */
 #define F_SA0_Set()				LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_8)
 #define F_SA0_Reset()			LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_8)
 #define F_SA1_Set()				LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9)
 #define F_SA1_Reset()			LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9)
 #define F_SA2_Set()				LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8)
 #define F_SA2_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_8)
+
+/*For Set/Reset amplification factor K1 need to use:                      */
+#define PA3_10_Set()			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3)
+#define PA3_10_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_3)
+#define PA4_100_Set()			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4)
+#define PA4_100_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4)
+#define PA5_1000_Set()			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5)
+#define PA5_1000_Reset()		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5)
+
+/*For Set/Reset amplification factor K1 need to use:                      */
+#define PB0_G0_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_0)
+#define PB0_G0_Reset() 			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_0)
+#define PB1_G1_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1)
+#define PB1_G1_Reset() 			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1)
+#define PB2_G2_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_2)
+#define PB2_G2_Reset() 			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_2)
+#define PB10_G3_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_10)
+#define PB10_G3_Reset() 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_10)
+#define PB11_G4_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11)
+#define PB11_G4_Reset() 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_11)
+
 
 
 #ifdef __cplusplus
