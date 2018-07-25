@@ -2,8 +2,8 @@
  * Setup peripheral of MC STM32L452
  */
 
-#ifndef SETUPPERIPH_H_
-#define SETUPPERIPH_H_
+#ifndef __SETUPPERIPH_H
+#define __SETUPPERIPH_H
 
 #define DEBUGprintf // Enable printf() message  to SWO
 

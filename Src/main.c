@@ -5,10 +5,10 @@
 
 #include "main.h"
 #include "SetupPeriph.h"
-#include "IC_fn.h"
+#include "conf_a_module.h"
+#include "uart_comm.h"
+
 #include  <stdio.h>
-
-
 
 /****************************TODO*************************
 
@@ -16,11 +16,18 @@
 
 2. Выяснить#define DEBUGpritf настройку при K1=1.
 
+3. Узнать про опрос статуса
 
 
 **********************************************************/
 //LL_mDelay(1);
 //LL_RCC_ClocksTypeDef check_RCC_Clocks,  *CHECK_RCC_CLOCKS=&check_RCC_Clocks; // Only for check setup clock. Not need use in release
+
+
+_SETTINGS_MODULE config_mod, *CONF_MOD_ptr=&config_mod;
+
+_UART_BUF uart1_buf, *UART1_BUF_ptr=&uart1_buf;
+
 
 int main(void){
 

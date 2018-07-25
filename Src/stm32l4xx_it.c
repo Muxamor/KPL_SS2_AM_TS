@@ -4,35 +4,16 @@
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx.h"
 #include "stm32l4xx_it.h"
+
+#include "SetupPeriph.h"
+#include "conf_a_module.h"
+#include "uart_comm.h"
+
+#include "global_variables.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -194,32 +175,47 @@ void SysTick_Handler(void)
 */
 void USART1_IRQHandler(void){
 
-    uint16_t input_data9b=0;
-
-    // делаем проверку на то что принимаем байты в заисимости от режима 
+    uint16_t input_data9b = 0;
+    uint8_t input_data8b = 0;
+   
     if(LL_USART_IsActiveFlag_RXNE(USART1)){
 
         input_data9b = LL_USART_ReceiveData9(USART1);
 
-        if((input_data9b & 0x0100) != 0){ // определяем пришли адресс или данные
-             //делаее респозноввние адреса.
-            //если адресс совпал то принимаем остальные  один или 3 байта в зависимости от режима работы 
+        if( (input_data9b & 0x0100) != 0 ){ //check that we got byte with address 
 
-        }else{//пришли данные
+            input_data8b = (uint8_t)input_data9b;
 
+            if( input_data8b == CONF_MOD_ptr->addr_module_req_data_adc ){ // check got request ADC data 
 
+                UART1_BUF_ptr->ADC_data_request_flag = 1;
+                UART1_BUF_ptr->received_command_flag = 1;
+
+            } else if( (input_data8b == 0x00) || ((input_data8b>>3) == CONF_MOD_ptr->addr_module) ){ // chaeck we got broadcast message or me address module
+
+                  UART1_BUF_ptr->UART_Recive_Buf[0] = input_data8b;
+                  UART1_BUF_ptr->UART_rec_buf_len = 1;
+                  UART1_BUF_ptr->recive_data_permit_flag = 1;
+            }
+
+        } else if( UART1_BUF_ptr->recive_data_permit_flag == 1 ){ // getting data if we have permit to recive byte with data 
+
+            UART1_BUF_ptr->UART_Recive_Buf[ UART1_BUF_ptr->UART_rec_buf_len ] = (uint8_t)input_data9b;
+            UART1_BUF_ptr->UART_rec_buf_len++;
+
+            if( UART1_BUF_ptr->UART_rec_buf_len == 4 ){ // finish getting command
+
+                UART1_BUF_ptr->received_command_flag = 1;
+                UART1_BUF_ptr->recive_data_permit_flag = 0;
+            }
         }
 
-
     }
-
-
-
 
   // LL_USART_RequestRxDataFlush(USART1); -- на слуяай если не вычитываем пришедшие данные
 
   	/*
-  	LL_USART_IsActiveFlag_RXNE(USART_TypeDef *USARTx) /// Проверяем что данные пришили
+  	LL_USART_IsActiveFlag_RXNE(USART_TypeDef *USARTx) 
   	RXNE
   	: Read data register not empty
   	This bit is set by hardware when the content
@@ -230,16 +226,6 @@ void USART1_IRQHandler(void){
   	An interrupt is generated if RXNEIE=1 in the USART_CR1 register.
   	0: data is not received
   	1: Received data is ready to be read.*/
-
-  /* USER CODE BEGIN USART1_IRQn 0 */
-
-  /* USER CODE END USART1_IRQn 0 */
-  /* USER CODE BEGIN USART1_IRQn 1 */
-
-  /* USER CODE END USART1_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

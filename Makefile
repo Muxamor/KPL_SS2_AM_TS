@@ -6,7 +6,7 @@ TARGET = KPL_SS2_AM_TS
 
 
 # Set the FLAG OS_SYSTEM - LINUX or MAC_OS it depends which sistem are you use to build.
-BUILD_OS_SYSTEM = LINUX
+BUILD_OS_SYSTEM = MAC_OS
 
 
 ######################################
@@ -31,10 +31,10 @@ BUILD_DIR = Build_gcc_eabi
 C_SOURCES =  \
 Src/main.c \
 Src/SetupPeriph.c \
-Src/usart.c \
+Src/uart_comm.c \
 Src/stm32l4xx_it.c \
 Src/syscalls.c \
-Src/IC_fn.c \
+Src/conf_a_module.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_dma.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_exti.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.c \

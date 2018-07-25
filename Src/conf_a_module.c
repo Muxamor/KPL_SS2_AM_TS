@@ -10,7 +10,7 @@
 #include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_tim.h"
 #include "SetupPeriph.h"
-#include "IC_fn.h"
+#include "conf_a_module.h"
 
 #include  <stdio.h>
 
@@ -145,7 +145,7 @@ ErrorStatus Set_Amp_Factor_K1(uint8_t namber_value){
 ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 
 	uint16_t K2=0;
-
+	
 	switch(namber_value){
 
 		case 0: // Set K2=1
