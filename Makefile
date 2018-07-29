@@ -33,6 +33,7 @@ Src/main.c \
 Src/SetupPeriph.c \
 Src/uart_comm.c \
 Src/spi_adc.c \
+Src/i2c.c \
 Src/stm32l4xx_it.c \
 Src/syscalls.c \
 Src/conf_a_module.c \

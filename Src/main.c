@@ -8,6 +8,7 @@
 #include "conf_a_module.h"
 #include "uart_comm.h"
 #include "spi_adc.h"
+#include "i2c.h"
 
 #include  <stdio.h>
 
@@ -18,7 +19,7 @@
 
 2. Выяснить#define DEBUGpritf настройку при K1=1.
 
-3. Узнать про опрос статуса
+3. Доделать проверки ошибоу в I2C.c
 
 
 **********************************************************/
@@ -45,6 +46,9 @@ int main(void){
 	USART1_Init();
 	SPI2_Init();
 	I2C1_Init();
+	CONF_MOD_ptr->addr_module = I2C_Read_addr_a_module(I2C1,0x40);
+	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
+
 	PWM_Init(PWM_TIM2_CH2_PA1);
 	//PWM_Init(PWM_TIM3_CH1_PA6);
 	//SetupInterrupt();

@@ -267,3 +267,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 
 	return SUCCESS;
 }
+
+
+
+

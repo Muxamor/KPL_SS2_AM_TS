@@ -1,5 +1,5 @@
 /*
- * IC_fn.c
+ * spi_adc.c
  *
  *  Created on: Jul 10, 2018
  *      Author: muxamor

@@ -1512,6 +1512,7 @@ __STATIC_INLINE uint32_t LL_I2C_IsEnabledIT_ERR(I2C_TypeDef *I2Cx)
   * @}
   */
 
+
 /** @defgroup I2C_LL_EF_FLAG_management FLAG_management
   * @{
   */
