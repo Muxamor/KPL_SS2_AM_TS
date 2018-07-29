@@ -7,8 +7,10 @@
 #include "SetupPeriph.h"
 #include "conf_a_module.h"
 #include "uart_comm.h"
+#include "spi_adc.h"
 
 #include  <stdio.h>
+
 
 /****************************TODO*************************
 

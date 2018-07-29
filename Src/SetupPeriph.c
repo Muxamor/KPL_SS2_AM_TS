@@ -327,7 +327,7 @@ void SPI2_Init(void){
   	/* Peripheral clock enable */
   	LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_SPI2);
   	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOC);
-	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB);
+	  LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB);
   
   	/**SPI2 GPIO Configuration  
   	PC2   ------> SPI2_MISO
@@ -358,7 +358,7 @@ void SPI2_Init(void){
   	SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW;
   	SPI_InitStruct.ClockPhase = LL_SPI_PHASE_1EDGE;
   	SPI_InitStruct.NSS = LL_SPI_NSS_HARD_OUTPUT;
-  	SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV128; /// Скорость обмена нужно уточнить у Саши
+  	SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV2; /// Скорость обмена нужно уточнить у Саши
   	SPI_InitStruct.BitOrder = LL_SPI_MSB_FIRST;
   	SPI_InitStruct.CRCCalculation = LL_SPI_CRCCALCULATION_DISABLE;
   	SPI_InitStruct.CRCPoly = 0;//7;
@@ -402,7 +402,7 @@ void I2C1_Init(void){
     /**I2C Initialization 
     */
   	LL_I2C_EnableAutoEndMode(I2C1);
-	LL_I2C_DisableOwnAddress2(I2C1);
+	  LL_I2C_DisableOwnAddress2(I2C1);
   	LL_I2C_DisableGeneralCall(I2C1);
   	LL_I2C_EnableClockStretching(I2C1);
 
