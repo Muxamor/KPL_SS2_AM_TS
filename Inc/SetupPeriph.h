@@ -7,6 +7,8 @@
 
 #define DEBUGprintf // Enable printf() message  to SWO
 
+#define ADDR_I2C_TCA9554PWR 0x20 // Enable printf() message  to SWO
+
 enum PWR_TIMx{
   PWM_TIM2_CH2_PA1,
   PWM_TIM3_CH1_PA6

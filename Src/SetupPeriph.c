@@ -71,18 +71,19 @@ void SystemClock_Config(void){
 	}
 
 	LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE1);
-	/*
-  	//Enable HSE
-  	  LL_RCC_HSE_EnableBypass();
-  	  LL_RCC_HSE_Enable();
-   	   // Wait till HSE is ready
-  	  while(LL_RCC_HSE_IsReady() != 1);*/
 
+  	//Enable HSE
+  	LL_RCC_HSE_EnableBypass();
+  	LL_RCC_HSE_Enable();
+   	// Wait till HSE is ready
+  	while(LL_RCC_HSE_IsReady() != 1);
+
+    /*
 	//Enable HSI
 	LL_RCC_HSI_Enable();
 	//Wait till HSI is ready
 	while(LL_RCC_HSI_IsReady() != 1);
-	//LL_RCC_HSI_SetCalibTrimming(16);//not need to do this
+	//LL_RCC_HSI_SetCalibTrimming(16);//not need to do this */
 
 	// Enable LSI
 	LL_RCC_LSI_Enable();
@@ -90,7 +91,7 @@ void SystemClock_Config(void){
 	/* Wait till LSI is ready */
 	while(LL_RCC_LSI_IsReady() != 1);
 
-	LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI, LL_RCC_PLLM_DIV_1, 10, LL_RCC_PLLR_DIV_2);
+	LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLLM_DIV_1, 10, LL_RCC_PLLR_DIV_2);
 	LL_RCC_PLL_Enable();
 	LL_RCC_PLL_EnableDomain_SYS();
 
@@ -394,15 +395,15 @@ void I2C1_Init(void){
   	GPIO_InitStruct.Pin = LL_GPIO_PIN_6|LL_GPIO_PIN_7;
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
-  	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
-  	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+  	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN; //LL_GPIO_OUTPUT_PUSHPULL;
+  	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;//LL_GPIO_PULL_UP;
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_4;
   	LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /**I2C Initialization 
     */
   	LL_I2C_EnableAutoEndMode(I2C1);
-	  LL_I2C_DisableOwnAddress2(I2C1);
+	LL_I2C_DisableOwnAddress2(I2C1);
   	LL_I2C_DisableGeneralCall(I2C1);
   	LL_I2C_EnableClockStretching(I2C1);
 
@@ -416,6 +417,8 @@ void I2C1_Init(void){
   	LL_I2C_Init(I2C1, &I2C_InitStruct);
 
   	LL_I2C_SetOwnAddress2(I2C1, 0, LL_I2C_OWNADDRESS2_NOMASK);
+
+  	LL_I2C_Enable(I2C1);
 }
 
 /**

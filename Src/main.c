@@ -46,8 +46,18 @@ int main(void){
 	USART1_Init();
 	SPI2_Init();
 	I2C1_Init();
-	CONF_MOD_ptr->addr_module = I2C_Read_addr_a_module(I2C1,0x40);
-	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
+
+	LED_Yellow_HL1_ON();
+
+	printf("Finish setup periphery. Success! \r\n");
+while(1){
+	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);
+}
+CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
+
+
+//	LED_Green_HL2_ON();
+	LED_Green_HL3_ON();
 
 	PWM_Init(PWM_TIM2_CH2_PA1);
 	//PWM_Init(PWM_TIM3_CH1_PA6);
@@ -55,7 +65,8 @@ int main(void){
 
 	//MX_IWDG_Init();
 
-	printf("Finish setup periphery. Success! \r\n");
+
+
 
 	while(1){
 
