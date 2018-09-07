@@ -47,13 +47,12 @@ int main(void){
 	SPI2_Init();
 	I2C1_Init();
 
+	printf("Finish setup periphery. Success! \r\n");
 	LED_Yellow_HL1_ON();
 
-	printf("Finish setup periphery. Success! \r\n");
-while(1){
+
 	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);
-}
-CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
+	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
 
 
 //	LED_Green_HL2_ON();

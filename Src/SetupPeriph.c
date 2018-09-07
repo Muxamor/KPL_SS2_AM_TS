@@ -408,7 +408,7 @@ void I2C1_Init(void){
   	LL_I2C_EnableClockStretching(I2C1);
 
   	I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
-  	I2C_InitStruct.Timing = 0x10909CEC;//0x00702991;
+  	I2C_InitStruct.Timing = 0x10909CEC;//  - Frequenci I2C=100 kHz //0x00702991; - Frequenci I2C=400 kHz
   	I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
   	I2C_InitStruct.DigitalFilter = 0;
   	I2C_InitStruct.OwnAddress1 = 0;
