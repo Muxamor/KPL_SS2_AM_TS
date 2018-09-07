@@ -4562,11 +4562,11 @@ void I2C1_Init(void){
   	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
  8001c60:	2303      	movs	r3, #3
  8001c62:	60fb      	str	r3, [r7, #12]
-  	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN; //LL_GPIO_OUTPUT_PUSHPULL;
+  	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
  8001c64:	2301      	movs	r3, #1
  8001c66:	613b      	str	r3, [r7, #16]
-  	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;//LL_GPIO_PULL_UP;
- 8001c68:	2300      	movs	r3, #0
+  	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+ 8001c68:	2301      	movs	r3, #1
  8001c6a:	617b      	str	r3, [r7, #20]
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_4;
  8001c6c:	2304      	movs	r3, #4
@@ -4595,7 +4595,7 @@ void I2C1_Init(void){
   	I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
  8001c92:	2300      	movs	r3, #0
  8001c94:	61fb      	str	r3, [r7, #28]
-  	I2C_InitStruct.Timing = 0x00702991;
+  	I2C_InitStruct.Timing = 0x10909CEC;//0x00702991;
  8001c96:	4b11      	ldr	r3, [pc, #68]	; (8001cdc <I2C1_Init+0x98>)
  8001c98:	623b      	str	r3, [r7, #32]
   	I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
@@ -4636,7 +4636,7 @@ void I2C1_Init(void){
  8001cd2:	bf00      	nop
  8001cd4:	48000400 	.word	0x48000400
  8001cd8:	40005400 	.word	0x40005400
- 8001cdc:	00702991 	.word	0x00702991
+ 8001cdc:	10909cec 	.word	0x10909cec
 
 08001ce0 <_Error_Handler>:
   *

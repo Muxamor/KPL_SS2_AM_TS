@@ -395,8 +395,8 @@ void I2C1_Init(void){
   	GPIO_InitStruct.Pin = LL_GPIO_PIN_6|LL_GPIO_PIN_7;
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
-  	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN; //LL_GPIO_OUTPUT_PUSHPULL;
-  	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;//LL_GPIO_PULL_UP;
+  	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+  	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_4;
   	LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
@@ -408,7 +408,7 @@ void I2C1_Init(void){
   	LL_I2C_EnableClockStretching(I2C1);
 
   	I2C_InitStruct.PeripheralMode = LL_I2C_MODE_I2C;
-  	I2C_InitStruct.Timing = 0x00702991;
+  	I2C_InitStruct.Timing = 0x10909CEC;//0x00702991;
   	I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
   	I2C_InitStruct.DigitalFilter = 0;
   	I2C_InitStruct.OwnAddress1 = 0;
