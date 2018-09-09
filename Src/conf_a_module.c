@@ -280,8 +280,12 @@ ErrorStatus Manual_settings(uint8_t namber_settings, enum PWR_TIMx timer_numberr
 
 	uint8_t namber_settings_K1_k2,namber_settings_Fcut;
 
-	namber_settings_K1_k2 = 0x3 & namber_settings;
+	namber_settings_K1_k2 = 0x7 & namber_settings;
 	namber_settings_Fcut = namber_settings >> 3;
+
+#ifdef DEBUGprintf
+	printf("\r\nManual configuration of the analog module:\r\n");
+#endif
 
 	switch (namber_settings_K1_k2){
 

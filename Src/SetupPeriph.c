@@ -134,7 +134,7 @@ void SetupLED(void){
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_10|LL_GPIO_PIN_11|LL_GPIO_PIN_12;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
 	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL; // try set - LL_GPIO_OUTPUT_OPENDRAIN on real board
+	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -218,7 +218,6 @@ void SetupGPIO(void){
 	/*F_SA2_Set()       F_SA2_Reset()               */
 	/*Define in SetupPeriph.h                       */
 
-
 	/* Configure pins for control main amplifier K2. out: PB0=G0 PB1=G1 PB2=G2 PB10=G3 PB11=G4  in: COMP4=PA2   */
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1|LL_GPIO_PIN_2|LL_GPIO_PIN_10|LL_GPIO_PIN_11;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
@@ -229,11 +228,10 @@ void SetupGPIO(void){
 
 	/*off K2=1 */
 	LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_0|LL_GPIO_PIN_1|LL_GPIO_PIN_2|LL_GPIO_PIN_10|LL_GPIO_PIN_11);
+
 	/* Config COMP4*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-	//GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-	//GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -245,15 +243,13 @@ void SetupGPIO(void){
 	/*PB11_G4_Set()     PB11_G4_Reset()             */
 	/*Define in SetupPeriph.h                       */
 
+	/*Config input pin to start manual settup */
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Config input pin to start manual settup */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
-  LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-	////////удалить только для отладки на NUcleo board
-
+	//удалить только для отладки на NUcleo board
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
