@@ -19,6 +19,7 @@
  ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number);
  ErrorStatus Set_Amp_Factor_K1(uint8_t namber_value);
  ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value);
+ ErrorStatus Manual_settings(uint8_t namber_settings, enum PWR_TIMx timer_numberr);
 
 
 

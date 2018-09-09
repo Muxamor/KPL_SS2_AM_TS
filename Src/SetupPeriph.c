@@ -160,6 +160,7 @@ void SetupGPIO(void){
 	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
 	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOC);
 	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB);
+  LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOD);
 
 
 	/* Configure pins out for control preamplifier K1. PA3=10 PA4=100 PA5=1000 for AG1411 ON=0 OFF=1    */
@@ -244,6 +245,12 @@ void SetupGPIO(void){
 	/*PB11_G4_Set()     PB11_G4_Reset()             */
 	/*Define in SetupPeriph.h                       */
 
+
+  /*Config input pin to start manual settup */
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+  LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 	////////удалить только для отладки на NUcleo board
 

@@ -269,5 +269,90 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 }
 
 
+/**
+  * @brief  Manual setup module through configuration board.
+  * @param  number_settings
+  * @retval An ErrorStatus enumeration
+  *          - SUCCESS: GPIO registers are initialized according to GPIO_InitStruct content
+  *          - ERROR:   Not applicable
+ */
+ErrorStatus Manual_settings(uint8_t namber_settings, enum PWR_TIMx timer_numberr){
 
+	uint8_t namber_settings_K1_k2,namber_settings_Fcut;
+
+	namber_settings_K1_k2 = 0x3 & namber_settings;
+	namber_settings_Fcut = namber_settings >> 3;
+
+	switch (namber_settings_K1_k2){
+
+		case 0: //K1=1 K2=1 
+			Set_Amp_Factor_K1(0);
+			Set_Amp_Factor_K2(0);
+			break;
+
+		case 1: //K1=10 K2=1 
+			Set_Amp_Factor_K1(1);
+			Set_Amp_Factor_K2(0);
+			break;
+
+		case 2: //K1=10 K2=2
+			Set_Amp_Factor_K1(1);
+			Set_Amp_Factor_K2(1);
+			break;
+
+		case 3: //K1=10 K2=4
+			Set_Amp_Factor_K1(1);
+			Set_Amp_Factor_K2(2);
+			break;
+
+		case 4: //K1=100 K2=1
+			Set_Amp_Factor_K1(2);
+			Set_Amp_Factor_K2(0);
+			break;
+
+		case 5: //K1=100 K2=2
+			Set_Amp_Factor_K1(2);
+			Set_Amp_Factor_K2(1);
+			break;
+
+		case 6: //K1=100 K2=4
+			Set_Amp_Factor_K1(2);
+			Set_Amp_Factor_K2(2);
+			break;
+
+		case 7: //K1=1000 K2=2048
+			Set_Amp_Factor_K1(3);
+			Set_Amp_Factor_K2(11);
+			break;
+
+		default:
+			Error_Handler();
+			return ERROR;
+	}
+
+	switch(namber_settings_Fcut){
+
+		case 0: //Fcut=10
+			Set_Ficlk_and_F_SAx(1, timer_numberr);
+			break;
+
+		case 1: //Fcut=300
+			Set_Ficlk_and_F_SAx(30, timer_numberr);
+			break;
+
+		case 2: //Fcut=700
+			Set_Ficlk_and_F_SAx(70, timer_numberr);
+			break;
+
+		case 3: ////Fcut=1000
+			Set_Ficlk_and_F_SAx(100, timer_numberr);
+			break;
+
+		default:
+			Error_Handler();
+			return ERROR;
+	}
+
+	return SUCCESS;
+}
 
