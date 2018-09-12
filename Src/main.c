@@ -64,9 +64,11 @@ int main(void){
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
 	}
 
-	LL_USART_TransmitData9(USART1, 0x1AA);
+	LL_USART_TransmitData9(USART1, 0x16B);
 
-	while(1);
+	//while(1){
+		//LL_USART_TransmitData9(USART1, 0x06B);
+	//}
 
 
 //for test

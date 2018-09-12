@@ -288,7 +288,7 @@ void USART1_Init(void){
             - Receive and transmit enabled
       */
   	USART_InitStruct.BaudRate = 5000000;
-  	USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_9B;
+  	USART_InitStruct.DataWidth =  LL_USART_DATAWIDTH_9B;
   	USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
   	USART_InitStruct.Parity = LL_USART_PARITY_NONE;
   	USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
