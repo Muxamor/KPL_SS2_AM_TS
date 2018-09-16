@@ -52,13 +52,3 @@ uint8_t I2C_Read_addr_a_module(I2C_TypeDef *I2Cx,uint32_t SlaveAddr){
 
 }
 
-/* удалить после проверки на железе
-__STATIC_INLINE uint32_t LL_I2C_IsActiveFlag_TC(I2C_TypeDef *I2Cx)
-__STATIC_INLINE void LL_I2C_HandleTransfer(I2C_TypeDef *I2Cx, uint32_t SlaveAddr, uint32_t SlaveAddrSize,
-                                           uint32_t TransferSize, uint32_t EndMode, uint32_t Request)
-
-__STATIC_INLINE void LL_I2C_SetSlaveAddr(I2C_TypeDef *I2Cx, uint32_t SlaveAddr)
-
-	// LL_I2C_GenerateStartCondition(I2Cx);
-
-*/

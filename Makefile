@@ -31,12 +31,12 @@ BUILD_DIR = Build_gcc_eabi
 C_SOURCES =  \
 Src/main.c \
 Src/SetupPeriph.c \
-Src/uart_comm.c \
 Src/spi_adc.c \
 Src/i2c.c \
 Src/stm32l4xx_it.c \
 Src/syscalls.c \
 Src/conf_a_module.c \
+Src/uart_comm.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_dma.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_exti.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_ll_gpio.c \

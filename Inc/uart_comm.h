@@ -21,7 +21,7 @@
 	uint8_t UART_rec_buf_len;
 	uint8_t recive_data_permit_flag; //1=Yes 0=No
  	uint8_t received_command_flag; 
- 	uint8_t ADC_data_request_flag; // 1 = Need send data ADC
+ 	uint8_t ADC_data_request_flag; // if 1 = Need send data ADC
 
  }_UART_BUF;
 

@@ -97,7 +97,10 @@ void MX_IWDG_Init(void);
 #define PB11_G4_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11)
 #define PB11_G4_Reset() 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_11)
 
-
+/*For read value of comporator:                                          */
+#define VALUE_COMP1()  LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_0)
+#define VALUE_COMP2()  LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_1)
+#define VALUE_COMP3()  LL_GPIO_IsInputPinSet(GPIOA, LL_GPIO_PIN_0)
 
 #ifdef __cplusplus
  extern "C" {

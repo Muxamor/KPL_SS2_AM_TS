@@ -13,6 +13,11 @@
  typedef struct{
  	uint8_t addr_module;
  	uint8_t addr_module_req_data_adc; //aaaa a001'B
+ 	uint8_t start_stop_ADC; // 0-Stop without stop ADC,   1 - stop with stop ADC,  2 - Start ADC 
+ 	uint8_t amp_factor_K1;  // value of amplifier factor K1
+ 	uint8_t amp_factor_K2;  // value of amplifier factor K2
+ 	uint8_t Fcut_value; // Cutof frequency
+ 	uint8_t status_ready; /// Спросить как првильно  по битам или просто число 
 
  }_SETTINGS_MODULE;
 
