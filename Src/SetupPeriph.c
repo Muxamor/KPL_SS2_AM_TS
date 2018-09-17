@@ -249,6 +249,20 @@ void SetupGPIO(void){
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+  /* Configure pins STOP-ADC out: PB14= STOP-ADC*/
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_14;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+  LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*For setup STOP-ADC need use:                      */
+  /*PB14_STOP_ADC_Set()                         */
+  /*PB14_STOP_ADC_Reset()                         */
+  /*Define in SetupPeriph.h                       */
+
+
 	//удалить только для отладки на NUcleo board
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;

@@ -17,13 +17,7 @@
 
 1. в conf_a_module выяснить как работать со статусом модуля побитно или по числу status_ready;
 
-2. Выяснить настройку при K1=1. (не помню что хотел)
-
 3. Доделать проверки ошибоу в I2C.c (возможно и не делать так как используется только при включении)
-
-4. Узнать как юыть со стоп с остановкой и без остановки ADC
-
-5. Коэффициент изменяется тольуо в состоянии СТОП или при СТАРТ тоже может?
 
 6. Проверить 			while( VALUE_COMP3() != RESET || i != 1000000 ){
 				i++;
@@ -62,6 +56,8 @@ int main(void){
 
 	printf("Finish setup periphery. Success! \r\n");
 	LED_Yellow_HL1_ON();
+
+	PB14_STOP_ADC_Set();   
 
 	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);
 	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;

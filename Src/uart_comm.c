@@ -13,7 +13,8 @@ ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * 
 
 	uint8_t number_command = 0xFF;
 	uint8_t ack_transmite_buf[4]=0x00;
-	uint8_t transmite_data_flag=0;
+	uint8_t transmite_data_flag=0; // =0 - NO ANSWER, =1 - answer the request value
+	ErrorStatus retval;
 
 	ack_transmite_buf[0] = uart_receive_buffer->UART_Recive_Buf[0];
 	
@@ -24,42 +25,72 @@ ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * 
 
 	if( number_command == 0x0 ){ // Get command Start or Stop
 
-		if( uart_receive_buffer->UART_Recive_Buf[1] == 0xFF ){
+		if( uart_receive_buffer->UART_Recive_Buf[1] == 0xFF ){ //Satart command
 			module_settings->start_stop_ADC = 0x02; //Start ADC
 
 		} else if( uart_receive_buffer->UART_Recive_Buf[1] == 0x00 ){
-			module_settings->start_stop_ADC = 0x00; //Stop without stop ADC???????????????????????????????
+			module_settings->start_stop_ADC = 0x00; ///stop without stop ADC
 
 		} else if( uart_receive_buffer->UART_Recive_Buf[1] == 0x01 ){
-			module_settings->start_stop_ADC = 0x01; //stop with stop ADC??????????????????????????????????
+			module_settings->start_stop_ADC = 0x01; //stop with stop ADC 
+			PB14_STOP_ADC_Reset();
+			LL_mDelay(1);
+			PB14_STOP_ADC_Set();   
 
 		} else{
-			module_settings->status_module = 0x02; ///??????????????????
+			module_settings->status_module = 0x02; // not understand command
 		}
+
+		transmite_data_flag = 0;
 
 	} else if( number_command == 0x02 ){ // Get command amplifier factor K1
 
-		if( uart_receive_buffer->UART_Recive_Buf[1] == 0x80){ // request of value  K1
+		if( uart_receive_buffer->UART_Recive_Buf[1] == 0x80){ // request of value K1
 			ack_transmite_buf[1] = module_settings->amp_factor_K1;
 			transmite_data_flag = 1;
 
 		} else { // amplifier factor K1
+			/*
 			if( VALUE_COMP1() == SET || VALUE_COMP2() == SET ){
 				while( VALUE_COMP3() != RESET || i != 1000000 ){
 					i++;
 				}			
-			}
+			}*/
+			retval = Set_Amp_Factor_K1( uart_receive_buffer->UART_Recive_Buf[1] & 0X03 ); 
 
-			Set_Amp_Factor_K1(uart_receive_buffer->UART_Recive_Buf[1]); 
-
-			if(!!!!!SUCCESS!!!!){
+			if(retval == SUCCESS ){
+				module_settings->amp_factor_K1 = uart_receive_buffer->UART_Recive_Buf[1] & 0X03 ;
 				ack_transmite_buf[1] = 0x01;
-				transmite_data_flag = 1;
+
+			}else{
+				ack_transmite_buf[1] = 0x00;
+				ack_transmite_buf[3] = 0xFF;
 			}
+
+			transmite_data_flag = 1;
 		}
 
 	} else if( number_command == 0x03){ // Get command amplifier factor K2
 
+		if( uart_receive_buffer->UART_Recive_Buf[1] == 0x80){ // request of value K1
+			ack_transmite_buf[1] = module_settings->amp_factor_K2;
+			transmite_data_flag = 1;
+
+		} else { 
+
+			retval = Set_Amp_Factor_K2( uart_receive_buffer->UART_Recive_Buf[1] & 0X0F );
+
+			if(retval == SUCCESS ){
+				module_settings->amp_factor_K2 = uart_receive_buffer->UART_Recive_Buf[1] & 0X0F ;
+				ack_transmite_buf[1] = 0x01;
+
+			}else{
+				ack_transmite_buf[1] = 0x00;
+				ack_transmite_buf[3] = 0xFF;
+			}
+
+			transmite_data_flag = 1;
+		}
 
 	} else if( number_command == 0x04 ){ // Get command cutof frequency 
 		

@@ -78,19 +78,19 @@ void MX_IWDG_Init(void);
 #define F_SA2_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_8)
 
 /*For Set/Reset amplification factor K1 need to use:                      */
-#define PA3_10_Set()			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3)
+#define PA3_10_Set()			  LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3)
 #define PA3_10_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_3)
-#define PA4_100_Set()			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4)
+#define PA4_100_Set()			  LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4)
 #define PA4_100_Reset()			LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4)
 #define PA5_1000_Set()			LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5)
 #define PA5_1000_Reset()		LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5)
 
 /*For Set/Reset amplification factor K1 need to use:                      */
-#define PB0_G0_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_0)
+#define PB0_G0_Set() 			  LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_0)
 #define PB0_G0_Reset() 			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_0)
-#define PB1_G1_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1)
+#define PB1_G1_Set() 			  LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1)
 #define PB1_G1_Reset() 			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_1)
-#define PB2_G2_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_2)
+#define PB2_G2_Set() 			  LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_2)
 #define PB2_G2_Reset() 			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_2)
 #define PB10_G3_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_10)
 #define PB10_G3_Reset() 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_10)
@@ -101,6 +101,11 @@ void MX_IWDG_Init(void);
 #define VALUE_COMP1()  LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_0)
 #define VALUE_COMP2()  LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_1)
 #define VALUE_COMP3()  LL_GPIO_IsInputPinSet(GPIOA, LL_GPIO_PIN_0)
+
+/*For Set/Reset STOP-ADC Reset=stop Set=!stop                            */
+#define PB14_STOP_ADC_Set()    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_14)   
+#define PB14_STOP_ADC_Reset()  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_14)                    
+
 
 #ifdef __cplusplus
  extern "C" {
