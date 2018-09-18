@@ -6,33 +6,90 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-
+#include "stm32l4xx.h"
+#include "stm32l4xx_ll_utils.h"
+#include "stm32l4xx_ll_gpio.h"
+#include "stm32l4xx_ll_usart.h"
+#include "SetupPeriph.h"
+#include "conf_a_module.h"
 #include "uart_comm.h"
 
-ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * module_settings, enum PWR_TIMx timer_numberr){
+#include  <stdio.h>
+
+
+ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
+
+	uint32_t counter=0;
+
+	for ( uint8_t i=0 ; i<4; i++ ){
+
+		counter=0;
+		while( LL_USART_IsActiveFlag_TXE(USARTx) == RESET ){
+			counter++;
+			if(counter==100000000){
+				Error_Handler();
+				goto exit_error;
+			}
+		}
+
+		if (i==0){
+			LL_USART_TransmitData9( USARTx, 0x1FF & mass[i] );
+
+		}else{
+			LL_USART_TransmitData9( USARTx, mass[i] );
+
+		}
+	}
+
+	counter=0;
+	while( LL_USART_IsActiveFlag_TC( USARTx ) == RESET ){
+		counter++;
+		if(counter==100000000){
+			Error_Handler();
+			goto exit_error;
+		}
+	}
+
+	return SUCCESS;
+
+	exit_error:
+
+	#ifdef DEBUGprintf
+			printf("ERROR transmitting data through UART1");
+	#endif
+
+	return ERROR;
+}
+
+
+
+
+
+
+void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE * module_settings, enum PWR_TIMx timer_numberr,  USART_TypeDef *USARTx){
 
 	uint8_t number_command = 0xFF;
-	uint8_t ack_transmite_buf[4]=0x00;
-	uint8_t transmite_data_flag=0; // =0 - NO ANSWER, =1 - answer the request value
+	uint8_t ack_transmite_buf[4];
+	uint8_t transmite_data_flag=0; // =0 - NO ANSWER, =1 - answer at request  
 	ErrorStatus retval;
 
-	ack_transmite_buf[0] = uart_receive_buffer->UART_Recive_Buf[0];
+	ack_transmite_buf[0] = uart_receive_buffer.UART_Recive_Buf[0];
 	
 	ack_transmite_buf[2] = 0x00;
 	ack_transmite_buf[3] = 0x00;
 
-	number_command = 0x07 & uart_receive_buffer->UART_Recive_Buf[0];
+	number_command = 0x07 & uart_receive_buffer.UART_Recive_Buf[0];
 
 	if( number_command == 0x0 ){ // Get command Start or Stop
-
-		if( uart_receive_buffer->UART_Recive_Buf[1] == 0xFF ){ //Satart command
+		if( uart_receive_buffer.UART_Recive_Buf[1] == 0xFF ){ //Satart command
 			module_settings->start_stop_ADC = 0x02; //Start ADC
 
-		} else if( uart_receive_buffer->UART_Recive_Buf[1] == 0x00 ){
+		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x00 ){
 			module_settings->start_stop_ADC = 0x00; ///stop without stop ADC
 
-		} else if( uart_receive_buffer->UART_Recive_Buf[1] == 0x01 ){
+		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x01 ){
 			module_settings->start_stop_ADC = 0x01; //stop with stop ADC 
+
 			PB14_STOP_ADC_Reset();
 			LL_mDelay(1);
 			PB14_STOP_ADC_Set();   
@@ -44,8 +101,7 @@ ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * 
 		transmite_data_flag = 0;
 
 	} else if( number_command == 0x02 ){ // Get command amplifier factor K1
-
-		if( uart_receive_buffer->UART_Recive_Buf[1] == 0x80){ // request of value K1
+		if( uart_receive_buffer.UART_Recive_Buf[1] == 0x80){ // request of value K1
 			ack_transmite_buf[1] = module_settings->amp_factor_K1;
 			transmite_data_flag = 1;
 
@@ -56,10 +112,10 @@ ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * 
 					i++;
 				}			
 			}*/
-			retval = Set_Amp_Factor_K1( uart_receive_buffer->UART_Recive_Buf[1] & 0X03 ); 
+			retval = Set_Amp_Factor_K1( uart_receive_buffer.UART_Recive_Buf[1] & 0X03 ); 
 
 			if(retval == SUCCESS ){
-				module_settings->amp_factor_K1 = uart_receive_buffer->UART_Recive_Buf[1] & 0X03 ;
+				module_settings->amp_factor_K1 = uart_receive_buffer.UART_Recive_Buf[1] & 0X03;
 				ack_transmite_buf[1] = 0x01;
 
 			}else{
@@ -71,17 +127,15 @@ ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * 
 		}
 
 	} else if( number_command == 0x03){ // Get command amplifier factor K2
-
-		if( uart_receive_buffer->UART_Recive_Buf[1] == 0x80){ // request of value K1
+		if( uart_receive_buffer.UART_Recive_Buf[1] == 0x80){ // request of value K1
 			ack_transmite_buf[1] = module_settings->amp_factor_K2;
 			transmite_data_flag = 1;
 
 		} else { 
-
-			retval = Set_Amp_Factor_K2( uart_receive_buffer->UART_Recive_Buf[1] & 0X0F );
+			retval = Set_Amp_Factor_K2( uart_receive_buffer.UART_Recive_Buf[1] & 0X0F );
 
 			if(retval == SUCCESS ){
-				module_settings->amp_factor_K2 = uart_receive_buffer->UART_Recive_Buf[1] & 0X0F ;
+				module_settings->amp_factor_K2 = uart_receive_buffer.UART_Recive_Buf[1] & 0X0F ;
 				ack_transmite_buf[1] = 0x01;
 
 			}else{
@@ -93,42 +147,45 @@ ErrorStatus parser_command ( _UART_BUF *uart_receive_buffer, _SETTINGS_MODULE * 
 		}
 
 	} else if( number_command == 0x04 ){ // Get command cutof frequency 
-		
+
+		if( uart_receive_buffer.UART_Recive_Buf[1] == 0x80){ // request of value K1
+			ack_transmite_buf[1] = module_settings->Fcut_value;
+			transmite_data_flag = 1;
+
+		} else { 
+
+			retval = Set_Ficlk_and_F_SAx( uart_receive_buffer.UART_Recive_Buf[1] & 0X7F , timer_numberr );
+
+			if(retval == SUCCESS ){
+				module_settings->Fcut_value = uart_receive_buffer.UART_Recive_Buf[1] & 0X7F ;
+				ack_transmite_buf[1] = 0x01;
+
+			}else{
+				ack_transmite_buf[1] = 0x00;
+				ack_transmite_buf[3] = 0xFF;
+			}
+
+			transmite_data_flag = 1;
+		}
 
 	} else if( number_command == 0x05 ){ // Get command status command
+		ack_transmite_buf[1] = module_settings->status_module;
+		transmite_data_flag = 1;
 
-
-	} else{
-
-		//Error
+	} else{ // Error in command 
+		ack_transmite_buf[1] = 0x00;
+		ack_transmite_buf[3] = 0xFF;
+		transmite_data_flag = 1;
 	}
 
-
-
+	if( transmite_data_flag == 1 ){
+		Data_transmite_UART_9B ((uint16_t*) ack_transmite_buf, USARTx);
+	}
 
 }
 
- 	uint8_t addr_module;
- 	uint8_t addr_module_req_data_adc; //aaaa a001'B
- 	uint8_t start_stop_ADC; // 0-Stop witout stop ADC,   1 - stop with stop ADC,  2 - Start ADC 
- 	uint8_t amp_factor_K1;  // value of amplifier factor K1
- 	uint8_t amp_factor_K2;  // value of amplifier factor K2
- 	uint8_t Fcut_value; // Cutof frequency
- 	uint8_t status_ready; /// Спросить как првильно  по битам или просто число 
 
 
 
 
- typedef struct{
 
-	uint8_t UART_Recive_Buf[4];
-	//uint8_t UART_Transmite_Buf[4]; // Подумать на счет удалить 
-
-	uint8_t UART_rec_buf_len;
-	uint8_t recive_data_permit_flag; //1=Yes 0=No
- 	uint8_t received_command_flag; 
- 	uint8_t ADC_data_request_flag; // if 1 = Need send data ADC
-
- }_UART_BUF;
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

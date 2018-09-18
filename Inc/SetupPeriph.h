@@ -103,7 +103,7 @@ void MX_IWDG_Init(void);
 #define VALUE_COMP3()  LL_GPIO_IsInputPinSet(GPIOA, LL_GPIO_PIN_0)
 
 /*For Set/Reset STOP-ADC Reset=stop Set=!stop                            */
-#define PB14_STOP_ADC_Set()    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_14)   
+#define PB14_STOP_ADC_Set()    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_14)  
 #define PB14_STOP_ADC_Reset()  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_14)                    
 
 

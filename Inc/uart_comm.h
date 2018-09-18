@@ -25,7 +25,8 @@
 
  }_UART_BUF;
 
-
+ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx);
+void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE * module_settings, enum PWR_TIMx timer_numberr,  USART_TypeDef *USARTx);
 
 
 

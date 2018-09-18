@@ -11,7 +11,6 @@
 */
 
 #include "stm32l4xx.h"
-#include "SetupPeriph.h"
 #include "stm32l4xx_ll_system.h"
 #include "stm32l4xx_ll_cortex.h"
 #include "stm32l4xx_ll_utils.h"
@@ -26,6 +25,7 @@
 #include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_tim.h"
 #include "stm32l4xx_ll_usart.h"
+#include "SetupPeriph.h"
 
 #include  <stdio.h>
 

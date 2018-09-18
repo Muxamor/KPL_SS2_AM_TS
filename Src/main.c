@@ -73,7 +73,7 @@ int main(void){
 	if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
 
 		if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
-			UART1_BUF_ptr->ADC_data_request_flag //clear flag interrupt
+			UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
 
 			//uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
 			//TO DO Need to write processed DATA ADC. Reduced from 24 bit to 16 bit and prepare to send

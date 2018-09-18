@@ -17,7 +17,7 @@
  	uint8_t amp_factor_K1;  // value of amplifier factor K1
  	uint8_t amp_factor_K2;  // value of amplifier factor K2
  	uint8_t Fcut_value; // Cutof frequency
- 	uint8_t status_ready; /// Спросить как првильно  по битам или просто число 
+ 	uint8_t status_module; /// Спросить как првильно  по битам или просто число 
 
  }_SETTINGS_MODULE;
 
