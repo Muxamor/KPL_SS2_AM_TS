@@ -15,6 +15,8 @@
 
 /****************************TODO*************************
 
+проверить на плате  настройку открытый коллектор для PB14_STOP_ADC
+
 1. в conf_a_module выяснить как работать со статусом модуля побитно или по числу status_ready;
 
 3. Доделать проверки ошибоу в I2C.c (возможно и не делать так как используется только при включении)
@@ -53,11 +55,11 @@ int main(void){
 	PWM_Init(PWM_TIM2_CH2_PA1); //PWM_TIM3_CH1_PA6
 	SetupInterrupt();
 	//MX_IWDG_Init();
-
 	printf("Finish setup periphery. Success! \r\n");
-	LED_Yellow_HL1_ON();
 
-	PB14_STOP_ADC_Set();   
+	PB14_STOP_ADC_Set(); 
+
+	LED_Yellow_HL1_ON();
 
 	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);
 	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
@@ -70,27 +72,35 @@ int main(void){
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
 	}
 
+
+	//Read ADC if we got ADC interrupt 
+	if(){
+		//uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
+		//TO DO Need to write processed DATA ADC. Reduced from 24 bit to 16 bit and prepare to send
+		//TO DO Add check start flag 
+	}
+
 	if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
 
 		if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
 			UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
+			Data_transmite_UART_9B (uint16_t mass[], USART1);
 
-			//uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
-			//TO DO Need to write processed DATA ADC. Reduced from 24 bit to 16 bit and prepare to send
-			//TO DO Add check start flag 
+			#ifdef DEBUGprintf
+				printf("ERROR transmitting data through UART1");
+			#endif
 
  		} else { // parse command 
-
+ 			UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
+ 			UART1_BUF_ptr->UART_rec_buf_len=0;
+			Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, PWM_TIM2_CH2_PA1, USART1);
 
  		}
-
-
-
 	}
 
 
 
-
+//******************below test zone******************************//
 
 
 	LL_USART_TransmitData9(USART1, 0x16B);
@@ -127,16 +137,6 @@ while(1){
   printf("Now is succsses start \r\n");
   Error_Handler();
 }
-
-  /* Initialize all configured peripherals */
- // MX_GPIO_Init();
-
-//  MX_I2C1_Init();
-///  MX_IWDG_Init();
- // MX_SPI2_Init();
-//  MX_TIM2_Init();
-//  MX_TIM3_Init();
-//  MX_USART1_UART_Init();
 
 }
 

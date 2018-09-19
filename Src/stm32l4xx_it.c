@@ -193,6 +193,10 @@ void USART1_IRQHandler(void){
 
             } else if( (input_data8b == 0x00) || ((input_data8b>>3) == CONF_MOD_ptr->addr_module) ){ // chaeck we got broadcast message or me address module
 
+                  if( UART1_BUF_ptr->received_command_flag == 1){ //Protection if you do not have time to process previous massage.
+                    UART1_BUF_ptr->received_command_flag = 0;//Clear previous message
+                  }
+                  
                   UART1_BUF_ptr->UART_Recive_Buf[0] = input_data8b;
                   UART1_BUF_ptr->UART_rec_buf_len = 1;
                   UART1_BUF_ptr->recive_data_permit_flag = 1;
