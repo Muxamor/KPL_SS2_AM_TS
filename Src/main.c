@@ -73,6 +73,7 @@ int main(void){
 	}
 
 
+/*
 	//Read ADC if we got ADC interrupt 
 	if(){
 		//uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
@@ -97,7 +98,7 @@ int main(void){
 
  		}
 	}
-
+*/
 
 
 //******************below test zone******************************//

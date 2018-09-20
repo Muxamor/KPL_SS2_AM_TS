@@ -232,4 +232,22 @@ void USART1_IRQHandler(void){
   	1: Received data is ready to be read.*/
 }
 
+/**
+* @brief This function handles EXTI line[15:10] interrupts.
+*/
+void EXTI15_10_IRQHandler(void){
+
+	//interrupt PB15 ADC-DRDY  FALLING edge
+	if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_13) != RESET){
+		LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_13);
+
+		//TODO write flag for interrupt
+	}
+
+
+
+
+  }
+
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
