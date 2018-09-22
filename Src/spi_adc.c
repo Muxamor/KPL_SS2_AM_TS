@@ -6,8 +6,8 @@
  */
 
 #include "stm32l4xx.h"
-#include "SetupPeriph.h"
 #include "stm32l4xx_ll_spi.h"
+#include "SetupPeriph.h"
 #include "spi_adc.h"
 
 #include  <stdio.h>

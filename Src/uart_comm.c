@@ -11,8 +11,12 @@
 #include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_usart.h"
 #include "SetupPeriph.h"
+#include "spi_adc.h"
 #include "conf_a_module.h"
 #include "uart_comm.h"
+
+
+//#include "global_variables.h"
 
 #include  <stdio.h>
 
@@ -70,7 +74,7 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
   * @retval void
   */
 
-void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE * module_settings, enum PWR_TIMx timer_numberr,  USART_TypeDef *USARTx){
+void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_settings, _ADC_PARAMETERS *adc_parametrs ,enum PWR_TIMx timer_numberr,  USART_TypeDef *USARTx){
 
 	uint8_t number_command = 0xFF;
 	uint8_t ack_transmite_buf[4];
@@ -87,12 +91,19 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE * module_s
 	if( number_command == 0x0 ){ // Get command Start or Stop
 		if( uart_receive_buffer.UART_Recive_Buf[1] == 0xFF ){ //Satart command
 			module_settings->start_stop_ADC = 0x02; //Start ADC
+			NVIC_EnableIRQ(EXTI15_10_IRQn);
+			NVIC_EnableIRQ(EXTI9_5_IRQn);
+			adc_parametrs->ADC_DRDY_flag=0; 
 
 		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x00 ){
 			module_settings->start_stop_ADC = 0x00; ///stop without stop ADC
+			NVIC_DisableIRQ(EXTI15_10_IRQn);
+			NVIC_DisableIRQ(EXTI9_5_IRQn);
 
 		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x01 ){
 			module_settings->start_stop_ADC = 0x01; //stop with stop ADC 
+			NVIC_DisableIRQ(EXTI15_10_IRQn);
+			NVIC_DisableIRQ(EXTI9_5_IRQn);
 
 			PB14_STOP_ADC_Reset();
 			LL_mDelay(1);

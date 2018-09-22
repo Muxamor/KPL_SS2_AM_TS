@@ -6,9 +6,9 @@
 #include "main.h"
 #include "SetupPeriph.h"
 #include "conf_a_module.h"
-#include "uart_comm.h"
 #include "spi_adc.h"
 #include "i2c.h"
+#include "uart_comm.h"
 
 #include  <stdio.h>
 
@@ -37,6 +37,8 @@ _SETTINGS_MODULE config_mod, *CONF_MOD_ptr=&config_mod;
 
 _UART_BUF uart1_buf, *UART1_BUF_ptr=&uart1_buf;
 
+_ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
+
 
 int main(void){
 
@@ -54,10 +56,12 @@ int main(void){
 	I2C1_Init();
 	PWM_Init(PWM_TIM2_CH2_PA1); //PWM_TIM3_CH1_PA6
 	SetupInterrupt();
+	
+	PB14_STOP_ADC_Set(); 
 	//MX_IWDG_Init();
 	printf("Finish setup periphery. Success! \r\n");
 
-	PB14_STOP_ADC_Set(); 
+
 
 	LED_Yellow_HL1_ON();
 
@@ -73,16 +77,16 @@ int main(void){
 	}
 
 
-/*
+
 	//Read ADC if we got ADC interrupt 
-	if(){
+	if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
 		//uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
 		//TO DO Need to write processed DATA ADC. Reduced from 24 bit to 16 bit and prepare to send
 		//TO DO Add check start flag 
 	}
-
+/*
 	if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
-
+// обнулить длину буфера 
 		if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
 			UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
 			Data_transmite_UART_9B (uint16_t mass[], USART1);
@@ -94,11 +98,11 @@ int main(void){
  		} else { // parse command 
  			UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
  			UART1_BUF_ptr->UART_rec_buf_len=0;
-			Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, PWM_TIM2_CH2_PA1, USART1);
+			Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
 
  		}
 	}
-*/
+	*/
 
 
 //******************below test zone******************************//

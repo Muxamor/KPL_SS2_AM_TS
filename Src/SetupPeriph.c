@@ -258,10 +258,10 @@ void SetupGPIO(void){
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*For setup STOP-ADC need use:                      */
+  /*For setup STOP-ADC need use:                */
   /*PB14_STOP_ADC_Set()                         */
-  /*PB14_STOP_ADC_Reset()                         */
-  /*Define in SetupPeriph.h                       */
+  /*PB14_STOP_ADC_Reset()                       */
+  /*Define in SetupPeriph.h                     */
 
 
 
@@ -532,33 +532,86 @@ void PWM_Init(enum PWR_TIMx timer_number){
 */
 void SetupInterrupt(void){
 	
-	LL_EXTI_InitTypeDef EXTI_InitStruct;
+    LL_EXTI_InitTypeDef EXTI_InitStruct;
 
   	/* Setup USART1 interrupt Init */
   	NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0)); //Set priority №1 from 0..15
- 	LL_USART_EnableIT_RXNE(USART1); //Enable RX no empty Interrupt
+ 	  LL_USART_EnableIT_RXNE(USART1); //Enable RX no empty Interrupt
   	//LL_USART_DisableIT_RXNE(USART1);
   	NVIC_EnableIRQ(USART1_IRQn);
   	/**********************************************/
 
   	/*Setup interrupt PB15 ADC-DRDY*/
-  	 LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTB, LL_SYSCFG_EXTI_LINE15);
+    LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTB, LL_SYSCFG_EXTI_LINE15);
 
-  	 EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_15;
-  	 EXTI_InitStruct.Line_32_63 = LL_EXTI_LINE_NONE;
-  	 EXTI_InitStruct.LineCommand = ENABLE;
-  	 EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-  	 EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
-  	 LL_EXTI_Init(&EXTI_InitStruct);
+    EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_15;
+    EXTI_InitStruct.Line_32_63 = LL_EXTI_LINE_NONE;
+    EXTI_InitStruct.LineCommand = ENABLE;
+    EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
+    EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
+    LL_EXTI_Init(&EXTI_InitStruct);
 
-  	 LL_GPIO_SetPinPull(GPIOB, LL_GPIO_PIN_15, LL_GPIO_PULL_NO);
-  	 LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_15, LL_GPIO_MODE_INPUT);
+    LL_GPIO_SetPinPull(GPIOB, LL_GPIO_PIN_15, LL_GPIO_PULL_NO);
+    LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_15, LL_GPIO_MODE_INPUT);
 
-  	 // EXTI interrupt init
-  	 NVIC_SetPriority(EXTI15_10_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),2, 0)); //Set priority №2 from 0..15
-  	// NVIC_EnableIRQ(EXTI15_10_IRQn);
- 	 NVIC_DisableIRQ(EXTI15_10_IRQn);
- 	/**********************************************/
+
+    /*For enable/desible interrupt ADC_DRDY need use:                                          */
+    /*INTERRUPT_ADC_DRDY_Enable()       LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_15)                 */
+    /*INTERRUPT_ADC_DRDY_Disable()      LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_15)                */
+    /*Define in SetupPeriph.h                                                                  */
+
+    // EXTI interrupt init
+    NVIC_SetPriority(EXTI15_10_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),2, 0)); //Set priority №2 from 0..15
+    NVIC_DisableIRQ(EXTI15_10_IRQn);
+    //NVIC_EnableIRQ(EXTI15_10_IRQn);
+    /**********************************************/
+ 	  
+
+
+    /*Setup interrupt PC5 DRDY_GOOD*/
+    LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTC, LL_SYSCFG_EXTI_LINE5);
+
+    EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_5;
+    EXTI_InitStruct.Line_32_63 = LL_EXTI_LINE_NONE;
+    EXTI_InitStruct.LineCommand = ENABLE;
+    EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
+    EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING;
+    LL_EXTI_Init(&EXTI_InitStruct);
+
+    LL_GPIO_SetPinPull(GPIOC, LL_GPIO_PIN_5, LL_GPIO_PULL_NO);
+    LL_GPIO_SetPinMode(GPIOC, LL_GPIO_PIN_5, LL_GPIO_MODE_INPUT);
+
+    /*For enable/desible interrupt DRDY_GOOD need use:                                        */
+    /*INTERRUPT_DRDY_GOOD_Enable()      LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_5)                 */
+    /*INTERRUPT_DRDY_GOOD_Disable()     LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_5)                */
+    /*Define in SetupPeriph.h                                                                 */
+
+
+
+    /*Setup interrupt PB8 PULSE*/
+    LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTB, LL_SYSCFG_EXTI_LINE8);
+
+    EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_8;
+    EXTI_InitStruct.Line_32_63 = LL_EXTI_LINE_NONE;
+    EXTI_InitStruct.LineCommand = ENABLE;
+    EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
+    EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
+    LL_EXTI_Init(&EXTI_InitStruct);
+
+    LL_GPIO_SetPinPull(GPIOB, LL_GPIO_PIN_8, LL_GPIO_PULL_NO);
+    LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_8, LL_GPIO_MODE_INPUT);
+
+    /*For enable/desible interrupt PULSE need use:                  */
+    /*INTERRUPT_PULSE_Enable()           LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_8)                 */
+    /*INTERRUPT_PULSE_Disable()          LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_8)                */
+    /*Define in SetupPeriph.h                          */
+
+    // EXTI interrupt init
+    NVIC_SetPriority(EXTI9_5_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),3, 0)); //Set priority №3 from 0..15
+    NVIC_DisableIRQ(EXTI9_5_IRQn);
+    //NVIC_EnableIRQ(EXTI9_5_IRQn);
+
+    /***************************************************/
 
 }
 

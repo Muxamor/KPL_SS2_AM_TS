@@ -11,7 +11,9 @@
 
 #include "SetupPeriph.h"
 #include "conf_a_module.h"
+#include "spi_adc.h"
 #include "uart_comm.h"
+
 
 #include "global_variables.h"
 
@@ -241,13 +243,39 @@ void EXTI15_10_IRQHandler(void){
 	if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_13) != RESET){
 		LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_13);
 
-		//TODO write flag for interrupt
+    ADC_PARAM_ptr->ADC_DRDY_flag = 1;
+    ADC_PARAM_ptr->DRDY_GOOD_flag = 0;
+    ADC_PARAM_ptr->PULSE_flag = 0;
+
+    INTERRUPT_DRDY_GOOD_Enable();
+    INTERRUPT_PULSE_Enable();
 	}
 
+}
 
+void EXTI9_5_IRQHandler(void){
 
+  //interrupt PC5 DRDY_GOOD  RISING edge
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_5) != RESET){
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_5);
 
+    ADC_PARAM_ptr->DRDY_GOOD_flag = 1;
+
+    INTERRUPT_DRDY_GOOD_Disable();
+    INTERRUPT_PULSE_Disable();
+    ADC_PARAM_ptr->PULSE_flag = 0;
   }
 
+  //interrupt PB8 PULSE FALLING edge
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_8) != RESET){
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_8);
+
+    ADC_PARAM_ptr->PULSE_flag = 1;
+    INTERRUPT_PULSE_Disable();
+    INTERRUPT_DRDY_GOOD_Disable();
+  }
+
+}
+  
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
