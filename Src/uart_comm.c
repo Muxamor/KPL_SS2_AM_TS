@@ -10,6 +10,7 @@
 #include "stm32l4xx_ll_utils.h"
 #include "stm32l4xx_ll_gpio.h"
 #include "stm32l4xx_ll_usart.h"
+#include "stm32l4xx_ll_exti.h"
 #include "SetupPeriph.h"
 #include "spi_adc.h"
 #include "conf_a_module.h"
@@ -91,20 +92,28 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 	if( number_command == 0x0 ){ // Get command Start or Stop
 		if( uart_receive_buffer.UART_Recive_Buf[1] == 0xFF ){ //Satart command
 			module_settings->start_stop_ADC = 0x02; //Start ADC
-			NVIC_EnableIRQ(EXTI15_10_IRQn);
-			NVIC_EnableIRQ(EXTI9_5_IRQn);
 			adc_parametrs->ADC_DRDY_flag=0; 
+			INTERRUPT_ADC_DRDY_Enable();
 
 		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x00 ){
 			module_settings->start_stop_ADC = 0x00; ///stop without stop ADC
-			NVIC_DisableIRQ(EXTI15_10_IRQn);
-			NVIC_DisableIRQ(EXTI9_5_IRQn);
+			INTERRUPT_ADC_DRDY_Disable();
+			INTERRUPT_DRDY_GOOD_Disable();
+			INTERRUPT_PULSE_Disable();
+			adc_parametrs->ADC_DRDY_flag=0;
+			adc_parametrs->DRDY_GOOD_flag=0;
+			adc_parametrs->PULSE_flag=0;
 
 		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x01 ){
 			module_settings->start_stop_ADC = 0x01; //stop with stop ADC 
-			NVIC_DisableIRQ(EXTI15_10_IRQn);
-			NVIC_DisableIRQ(EXTI9_5_IRQn);
+			INTERRUPT_ADC_DRDY_Disable();
+			INTERRUPT_DRDY_GOOD_Disable();
+			INTERRUPT_PULSE_Disable();
+			adc_parametrs->ADC_DRDY_flag=0;
+			adc_parametrs->DRDY_GOOD_flag=0;
+			adc_parametrs->PULSE_flag=0;
 
+			//Stop procedure ADC
 			PB14_STOP_ADC_Reset();
 			LL_mDelay(1);
 			PB14_STOP_ADC_Set();   

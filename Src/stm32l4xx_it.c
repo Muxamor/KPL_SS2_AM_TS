@@ -276,20 +276,6 @@ void EXTI9_5_IRQHandler(void){
   }
 
 }
-  
-void EXTI2_IRQHandler(void){
-
-  //interrupt PB15 ADC-DRDY  FALLING edge
-  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_2) != RESET){
-    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_2);
-
-   //LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_15)
-   LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_2); 
-  }
-
-}
 
 
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/**********END OF FILE****/

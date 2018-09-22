@@ -72,14 +72,10 @@ int main(void){
 	LED_Green_HL3_ON();
 
 
-	NVIC_EnableIRQ(EXTI2_IRQn);
-
-	while(1);
-
-	// manual settings if jumper is set
-	//if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
-		//Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
-	//}
+	// Manual settings if jumper is set
+	if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
+		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
+	}
 
 
 
@@ -107,7 +103,7 @@ int main(void){
 
  		}
 	}
-	*/
+*/
 
 
 //******************below test zone******************************//

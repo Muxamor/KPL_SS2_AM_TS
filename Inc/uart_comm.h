@@ -6,17 +6,11 @@
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_ll_usart.h"
-#include "stm32l4xx_ll_rcc.h"
-
  extern void _Error_Handler(char *, int);
 
  typedef struct{
 
 	uint8_t UART_Recive_Buf[4];
-	//uint8_t UART_Transmite_Buf[4]; // Подумать на счет удалить 
-
 	uint8_t UART_rec_buf_len;
 	uint8_t recive_data_permit_flag; //1=Yes 0=No
  	uint8_t received_command_flag; 
@@ -26,8 +20,6 @@
 
 ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx);
 void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE * module_settings, _ADC_PARAMETERS *adc_parametrs ,enum PWR_TIMx timer_numberr,  USART_TypeDef *USARTx);
-
-
 
 
 #ifdef __cplusplus

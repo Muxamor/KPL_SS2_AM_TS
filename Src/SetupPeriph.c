@@ -245,32 +245,23 @@ void SetupGPIO(void){
 	/*Define in SetupPeriph.h                       */
 
 	/*Config input pin to start manual settup */
-	//GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
-	//GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-	//GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
-	//LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /* Configure pins STOP-ADC out: PB14= STOP-ADC*/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_14;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	/* Configure pins STOP-ADC out: PB14= STOP-ADC*/
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_14;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+	LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*For setup STOP-ADC need use:                */
-  /*PB14_STOP_ADC_Set()                         */
-  /*PB14_STOP_ADC_Reset()                       */
-  /*Define in SetupPeriph.h                     */
-
-
-
-	//удалить только для отладки на NUcleo board
-//	GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
-//	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
-//	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-//	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
+	/*For setup STOP-ADC need use:                */
+	/*PB14_STOP_ADC_Set()                         */
+	/*PB14_STOP_ADC_Reset()                       */
+	/*Define in SetupPeriph.h                     */
 
 }
 
@@ -541,6 +532,7 @@ void SetupInterrupt(void){
   	NVIC_EnableIRQ(USART1_IRQn);
   	/**********************************************/
 
+
   	/*Setup interrupt PB15 ADC-DRDY*/
     LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTB, LL_SYSCFG_EXTI_LINE15);
 
@@ -567,7 +559,6 @@ void SetupInterrupt(void){
     /**********************************************/
  	  
 
-
     /*Setup interrupt PC5 DRDY_GOOD*/
     LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTC, LL_SYSCFG_EXTI_LINE5);
 
@@ -585,7 +576,6 @@ void SetupInterrupt(void){
     /*INTERRUPT_DRDY_GOOD_Enable()      LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_5)                 */
     /*INTERRUPT_DRDY_GOOD_Disable()     LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_5)                */
     /*Define in SetupPeriph.h                                                                 */
-
 
 
     /*Setup interrupt PB8 PULSE*/
@@ -612,29 +602,6 @@ void SetupInterrupt(void){
     //NVIC_EnableIRQ(EXTI9_5_IRQn);
 
     /***************************************************/
-
-    ////only for test 
-
-
-    LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTD, LL_SYSCFG_EXTI_LINE2);
-
-    EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_2;
-    EXTI_InitStruct.Line_32_63 = LL_EXTI_LINE_NONE;
-    EXTI_InitStruct.LineCommand = ENABLE;
-    EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-    EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
-    LL_EXTI_Init(&EXTI_InitStruct);
-
-    LL_GPIO_SetPinPull(GPIOD, LL_GPIO_PIN_2, LL_GPIO_PULL_UP);
-    LL_GPIO_SetPinMode(GPIOD, LL_GPIO_PIN_2, LL_GPIO_MODE_INPUT);
-
-    // EXTI interrupt init
-    NVIC_SetPriority(EXTI2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),3, 0)); //Set priority №3 from 0..15
-    NVIC_DisableIRQ(EXTI2_IRQn);
-    //NVIC_EnableIRQ(EXTI2_IRQn);
-
-
-
 }
 
 
