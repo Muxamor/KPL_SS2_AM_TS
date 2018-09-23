@@ -49,7 +49,7 @@ ErrorStatus SPI_Get_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_
 
 
 	#ifdef DEBUGprintf
-			printf("RAW_Data_AD7767=%lu \r\n",(unsigned long)(adc_data_mas[2]<<16) | (adc_data_mas[1]<<8) | (adc_data_mas[0]));
+			printf("RAW_Data_AD7767=%lu \r\n",(unsigned long)(adc_data_mas[0]<<16) | (adc_data_mas[1]<<8) | (adc_data_mas[2]));
 	#endif
 
 	return SUCCESS;
