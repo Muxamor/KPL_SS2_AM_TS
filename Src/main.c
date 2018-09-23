@@ -43,6 +43,7 @@ _ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
 int main(void){
 
 	uint8_t i=0, pin=1;
+	uint8_t ADC_data_mas;
 
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
@@ -56,32 +57,36 @@ int main(void){
 	I2C1_Init();
 	PWM_Init(PWM_TIM2_CH2_PA1); //PWM_TIM3_CH1_PA6
 	SetupInterrupt();
-	
-	PB14_STOP_ADC_Set(); 
 	//MX_IWDG_Init();
 	printf("Finish setup periphery. Success! \r\n");
-
+	
+	PB14_STOP_ADC_Set(); 
+	PC7_MCLK_Reset();
+    ADC_PARAM_ptr->ADC_DRDY_flag = 0;
+    ADC_PARAM_ptr->DRDY_GOOD_flag = 0;
+    ADC_PARAM_ptr->PULSE_flag = 0;
+    ADC_PARAM_ptr->Count_MCLK = 0;
+    printf("Default settings. Success! \r\n");
 
 
 	LED_Yellow_HL1_ON();
+	LED_Green_HL2_ON();
 
 	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);
 	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
-
-	LED_Green_HL2_ON();
-	LED_Green_HL3_ON();
-
 
 	// Manual settings if jumper is set
 	if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
 	}
 
+	LED_Green_HL3_ON();
+
 
 
 	//Read ADC if we got ADC interrupt 
 	if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
-		//uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
+//		SPI_Get_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_TypeDef *SPIx);
 		//TO DO Need to write processed DATA ADC. Reduced from 24 bit to 16 bit and prepare to send
 		//TO DO Add check start flag 
 	}

@@ -104,7 +104,11 @@ void MX_IWDG_Init(void);
 
 /*For Set/Reset STOP-ADC Reset=stop Set=!stop                            */
 #define PB14_STOP_ADC_Set()    LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_14)  
-#define PB14_STOP_ADC_Reset()  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_14)      
+#define PB14_STOP_ADC_Reset()  LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_14)
+
+/*For setup STOP-ADC need use:                */
+#define PC7_MCLK_Set()        LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_7)
+#define PC7_MCLK_Reset()      LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_7)
 
 /*For enable/desible interrupt ADC_DRDY need use: */
 #define INTERRUPT_ADC_DRDY_Enable()     LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_15)

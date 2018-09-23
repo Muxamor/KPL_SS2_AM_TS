@@ -16,23 +16,19 @@
   * @param  SPIx
   * @retval Data ADC 24 bits 
   */
-uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
-
-	uint32_t adc_data=0;
-	uint8_t adc_data_mas[3]; 
+ErrorStatus SPI_Get_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_TypeDef *SPIx){
 
 	uint32_t counter=0;
 
 	while(LL_SPI_IsActiveFlag_BSY(SPIx)==SET); //check that SPI not busy 
 
-	for(uint8_t i=0; i<3; i++){
-		LL_SPI_TransmitData8(SPIx, 0xFF);
+	for(uint8_t i=0; i<size_mas; i++){
+		LL_SPI_TransmitData8(SPIx, 0x00);
 
 		counter=0;
 		while(LL_SPI_IsActiveFlag_TXE(SPIx) == RESET){
 			counter++;
-			if(counter==100000000){
-				adc_data = 0xFFFFFFFF;
+			if(counter==10000000){
 				Error_Handler();
 				goto exit_error;
 			}
@@ -41,8 +37,7 @@ uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
 		counter=0;
 		while(LL_SPI_IsActiveFlag_RXNE(SPIx) == RESET){
 			counter++;
-			if(counter==100000000){
-				adc_data = 0xFFFFFFFF;
+			if(counter==10000000){
 				Error_Handler();
 				goto exit_error;
 			}
@@ -52,13 +47,18 @@ uint32_t SPI_Get_data_ADC7767 (SPI_TypeDef *SPIx){
 		adc_data_mas[i] = LL_SPI_ReceiveData8(SPIx);
 	}
 
-	adc_data = (adc_data_mas[2]<<16) | (adc_data_mas[1]<<8) | (adc_data_mas[0]);
-
-exit_error:
 
 	#ifdef DEBUGprintf
-			printf("RAW_Data_AD7767=%lu \r\n",(unsigned long)adc_data );
+			printf("RAW_Data_AD7767=%lu \r\n",(unsigned long)(adc_data_mas[2]<<16) | (adc_data_mas[1]<<8) | (adc_data_mas[0]));
 	#endif
 
-	return adc_data;
+	return SUCCESS;
+
+	exit_error:
+
+	#ifdef DEBUGprintf
+		printf("ERROR!Read ADC through SPI\r\n" );
+	#endif
+
+	return ERROR;
 }

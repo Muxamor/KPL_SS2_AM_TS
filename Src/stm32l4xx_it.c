@@ -240,8 +240,8 @@ void USART1_IRQHandler(void){
 void EXTI15_10_IRQHandler(void){
 
 	//interrupt PB15 ADC-DRDY  FALLING edge
-	if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_13) != RESET){
-		LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_13);
+	if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_15) != RESET){
+		LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_15);
 
     ADC_PARAM_ptr->ADC_DRDY_flag = 1;
     ADC_PARAM_ptr->DRDY_GOOD_flag = 0;
@@ -263,6 +263,7 @@ void EXTI9_5_IRQHandler(void){
 
     INTERRUPT_DRDY_GOOD_Disable();
     INTERRUPT_PULSE_Disable();
+    ADC_PARAM_ptr->Count_MCLK = 0;
     ADC_PARAM_ptr->PULSE_flag = 0;
   }
 
@@ -273,6 +274,12 @@ void EXTI9_5_IRQHandler(void){
     ADC_PARAM_ptr->PULSE_flag = 1;
     INTERRUPT_PULSE_Disable();
     INTERRUPT_DRDY_GOOD_Disable();
+    PC7_MCLK_Set();
+    ADC_PARAM_ptr->Count_MCLK = ADC_PARAM_ptr->Count_MCLK + 1;
+    __NOP();
+    __NOP();
+    __NOP();
+    PC7_MCLK_Reset();
   }
 
 }

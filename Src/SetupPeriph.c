@@ -84,7 +84,7 @@ void SystemClock_Config(void){
 	//Wait till HSI is ready
 	while(LL_RCC_HSI_IsReady() != 1);
 	//LL_RCC_HSI_SetCalibTrimming(16);//not need to do this
-	*/
+    */
 
 	// Enable LSI
 	LL_RCC_LSI_Enable();
@@ -261,6 +261,20 @@ void SetupGPIO(void){
 	/*For setup STOP-ADC need use:                */
 	/*PB14_STOP_ADC_Set()                         */
 	/*PB14_STOP_ADC_Reset()                       */
+	/*Define in SetupPeriph.h                     */
+
+
+	/* Configure pins MCLK+1 out: PC7= MCLK+1*/
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_7;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	/*For setup STOP-ADC need use:                */
+	/*PC7_MCLK_Set()                   	      */
+	/*PC7_MCLK_Reset()                	      */
 	/*Define in SetupPeriph.h                     */
 
 }
@@ -527,7 +541,7 @@ void SetupInterrupt(void){
 
   	/* Setup USART1 interrupt Init */
   	NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0)); //Set priority №1 from 0..15
- 	  LL_USART_EnableIT_RXNE(USART1); //Enable RX no empty Interrupt
+ 	LL_USART_EnableIT_RXNE(USART1); //Enable RX no empty Interrupt
   	//LL_USART_DisableIT_RXNE(USART1);
   	NVIC_EnableIRQ(USART1_IRQn);
   	/**********************************************/
@@ -554,8 +568,9 @@ void SetupInterrupt(void){
 
     // EXTI interrupt init
     NVIC_SetPriority(EXTI15_10_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),2, 0)); //Set priority №2 from 0..15
-    NVIC_DisableIRQ(EXTI15_10_IRQn);
-    //NVIC_EnableIRQ(EXTI15_10_IRQn);
+
+    NVIC_EnableIRQ(EXTI15_10_IRQn);
+    INTERRUPT_ADC_DRDY_Disable();
     /**********************************************/
  	  
 
@@ -598,10 +613,12 @@ void SetupInterrupt(void){
 
     // EXTI interrupt init
     NVIC_SetPriority(EXTI9_5_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),3, 0)); //Set priority №3 from 0..15
-    NVIC_DisableIRQ(EXTI9_5_IRQn);
-    //NVIC_EnableIRQ(EXTI9_5_IRQn);
 
+    NVIC_EnableIRQ(EXTI9_5_IRQn);
+    INTERRUPT_DRDY_GOOD_Disable();
+    INTERRUPT_PULSE_Disable();
     /***************************************************/
+
 }
 
 
