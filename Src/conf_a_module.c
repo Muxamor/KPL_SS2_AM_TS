@@ -154,7 +154,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=1;
 			break;
 		case 1: // Set K2=2
@@ -163,7 +163,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=2;
 			break;
 		case 2: // Set K2=4
@@ -172,7 +172,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=4;
 			break;
 		case 3: // Set K2=8
@@ -181,7 +181,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=8;
 			break;
 		case 4: // Set K2=16
@@ -190,7 +190,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Set();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=16;
 			break;
 		case 5: // Set K2=32
@@ -199,7 +199,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Set();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=32;
 			break;
 		case 6: // Set K2=64
@@ -208,7 +208,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Set();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=64;
 			break;
 		case 7: // Set K2=128
@@ -217,7 +217,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Set();
 			PB10_G3_Reset();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=128;
 			break;
 		case 8: // Set K2=256
@@ -226,7 +226,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Set();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=256;
 			break;
 		case 9: // Set K2=512
@@ -235,7 +235,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Set();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=512;
 			break;
 		case 10: // Set K2=1024
@@ -244,7 +244,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Set();
 			PB11_G4_Reset();
-			F_SA2_Set();
+			F_SA2_Reset();
 			K2=1024;
 			break;
 		case 11: // Set K2=2048
@@ -253,7 +253,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB2_G2_Reset();
 			PB10_G3_Set();
 			PB11_G4_Reset();
-			F_SA2_Reset();
+			F_SA2_Set();
 			K2=2048;
 			break;
 		default:

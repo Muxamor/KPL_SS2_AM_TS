@@ -27,6 +27,7 @@
 
 			 сколько i != 1000000  по времени
 
+7. module_settings->status_module = 0x02; // или писать 0x00? 
 
 **********************************************************/
 //LL_mDelay(1);
@@ -43,7 +44,8 @@ _ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
 int main(void){
 
 	uint8_t i=0, pin=1;
-	uint8_t ADC_data_mas;
+	uint8_t ADC_data_mas[3];
+	uint8_t ADC_data_transmit[4];
 
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
@@ -72,24 +74,96 @@ int main(void){
 	LED_Yellow_HL1_ON();
 	LED_Green_HL2_ON();
 
-	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);
-	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
-
 	// Manual settings if jumper is set
 	if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
+		CONF_MOD_ptr->addr_module = 0x1;
+
+	} else {
+		CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
 	}
+
+	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
 
 	LED_Green_HL3_ON();
 
+    //To OD выстасить статутсный байт 
 
-
+/*
 	//Read ADC if we got ADC interrupt 
 	if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
-//		SPI_Get_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_TypeDef *SPIx);
+
+		ADC_PARAM_ptr->ADC_DRDY_flag=0;
+
+		SPI_Get_data_ADC7767 ( ADC_data_mas, 3, SPI2 );
+
+ //////НЕ ПРАВИЛЬНОЕ ПРЕОБРАЗОВАНИЕ /////
+		if(data_mas[3]>=16){
+			if((data_mas[0]>>7) == 1){
+				data_mas[2] = data_mas[2] - 1;
+			}else{
+				data_mas[2] = data_mas[2] + 1;
+			}
+		}
+ /////////////////////////////////////////
+
+
+		ADC_data_transmit[0] =  CONF_MOD_ptr->addr_module << 3;
+		ADC_data_transmit[1] = 0x00;
+		ADC_data_transmit[2] = data_mas[0];
+		ADC_data_transmit[3] = data_mas[1];
+
+		if( VALUE_COMP1() == 1 && VALUE_COMP2() ==1 && VALUE_COMP4() == 0){ 
+			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x00; // Error COMP1 and COMP2
+			CONF_MOD_ptr->status_module = 0x15
+
+		} elese if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
+			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x04;  //Error  COMP2
+			CONF_MOD_ptr->status_module = 0x15
+
+		} elese if( VALUE_COMP1() == 1 && VALUE_COMP2() ==0 && VALUE_COMP4() == 0){  
+			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x02; //Error  COMP1
+			CONF_MOD_ptr->status_module = 0x15
+
+		} elese if( VALUE_COMP4() == 1 ){ 
+			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x06; //Error  COMP4
+			CONF_MOD_ptr->status_module = 0x15
+
+		} else {
+			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x01 // No Error
+		} 
+
+		if( ADC_PARAM_ptr->ADC_DRDY_flag != 1 ){ // do not got sync signal
+
+			while(ADC_PARAM_ptr->PULSE_flag == 0);
+
+			ADC_PARAM_ptr->PULSE_flag = 0;
+
+			CONF_MOD_ptr->status_module = 0x15
+			if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
+				CONF_MOD_ptr->status_module = 0x1D
+			}
+
+			ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8; /// как правлиьно сообщать что пошла рассинхронизация/??
+			ADC_data_transmit[1] = 0x00;
+			ADC_data_transmit[2] = 0x00;
+			ADC_data_transmit[3] = 0x00;
+
+
+
+			//To OD выстасить статутсный байт 
+		}
+
+		ADC_PARAM_ptr->ADC_DRDY_flag = 0;
+
+
+
+
 		//TO DO Need to write processed DATA ADC. Reduced from 24 bit to 16 bit and prepare to send
 		//TO DO Add check start flag 
 	}
+
+	*/
 /*
 	if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
 // обнулить длину буфера 

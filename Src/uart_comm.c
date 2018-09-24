@@ -196,6 +196,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 
 	} else if( number_command == 0x05 ){ // Get command status command
 		ack_transmite_buf[1] = module_settings->status_module;
+		module_settings->status_module = 0x02; // или писать 0x00? 
 		transmite_data_flag = 1;
 
 	} else{ // Error in command 

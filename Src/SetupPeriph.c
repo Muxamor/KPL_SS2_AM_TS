@@ -381,7 +381,7 @@ void SPI2_Init(void){
   	SPI_InitStruct.Mode = LL_SPI_MODE_MASTER;
   	SPI_InitStruct.DataWidth = LL_SPI_DATAWIDTH_8BIT;
   	SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW;
-  	SPI_InitStruct.ClockPhase = LL_SPI_PHASE_1EDGE;
+  	SPI_InitStruct.ClockPhase = LL_SPI_PHASE_2EDGE;
   	SPI_InitStruct.NSS = LL_SPI_NSS_HARD_OUTPUT;
   	SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV2; /// Скорость обмена нужно уточнить у Саши
   	SPI_InitStruct.BitOrder = LL_SPI_MSB_FIRST;
@@ -393,7 +393,7 @@ void SPI2_Init(void){
 
   	LL_SPI_EnableNSSPulseMgt(SPI2);
 
-  	LL_SPI_Enable(SPI2);// Добавлял сам проверить почему не сгенерилось автоматом
+  	LL_SPI_Enable(SPI2);
 
 }
 
