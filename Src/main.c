@@ -44,8 +44,8 @@ _ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
 int main(void){
 
 	uint8_t i=0, pin=1;
-	uint8_t ADC_data_mas[3];
-	uint8_t ADC_data_transmit[4];
+	//uint8_t ADC_data_mas[3];
+	//uint8_t ADC_data_transmit[4];
 
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
