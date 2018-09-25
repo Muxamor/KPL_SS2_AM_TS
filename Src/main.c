@@ -74,15 +74,14 @@ int main(void){
 	LED_Yellow_HL1_ON();
 	LED_Green_HL2_ON();
 
+	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
+	
 	// Manual settings if jumper is set
 	if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
-		CONF_MOD_ptr->addr_module = 0x1;
-
-	} else {
-		CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
-	}
-
+		CONF_MOD_ptr->addr_module = 0x01;
+	} 
+	
 	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
 
 	LED_Green_HL3_ON();
