@@ -89,6 +89,40 @@ int main(void){
     //To OD выстасить статутсный байт 
 
 
+	int32_t RAW_DATA_24_ADC =  0x800001; //0x7FFFFF;//
+			int16_t RAW_DATA_16_ADC = 0;
+			uint8_t data_mas[2] = {0};
+
+			float DATA_24_ADC = 0;
+			float DATA_16_ADC = 0;
+
+			if ( (RAW_DATA_24_ADC & 0x800000) == 0x800000 ){
+				RAW_DATA_24_ADC = RAW_DATA_24_ADC & 0x7FFFFF; //убераем 24 бит
+				RAW_DATA_24_ADC = RAW_DATA_24_ADC | 0xFF800000; //
+			}
+
+			DATA_24_ADC = (((float)RAW_DATA_24_ADC)/16777216)*5;
+
+			DATA_16_ADC = ((DATA_24_ADC* 65536)/5);
+
+			if(DATA_16_ADC<0){
+				if(DATA_16_ADC > -32768){
+					DATA_16_ADC = DATA_16_ADC - 0.55;
+				}
+
+			}else{
+				if(DATA_16_ADC < 32767){
+					DATA_16_ADC = DATA_16_ADC + 0.55;
+				}
+
+			}
+			//RAW_DATA_16_ADC = (int16_t)((DATA_24_ADC* 65536)/5);
+			RAW_DATA_16_ADC = (int16_t)DATA_16_ADC;
+
+			data_mas[0] = (uint8_t)(RAW_DATA_16_ADC>>8);
+			data_mas[1] =  (uint8_t)RAW_DATA_16_ADC;
+
+
 	//Read ADC if we got ADC interrupt 
 	if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
 
@@ -99,28 +133,7 @@ int main(void){
  		
 
  //////НЕ ПРАВИЛЬНОЕ ПРЕОБРАЗОВАНИЕ /////
-		int32_t RAW_DATA_24_ADC = 0x857BF6;
-		int16_t RAW_DATA_16_ADC = 0;
-		uint8_t data_mas[2] = {0};
 
-		float DATA_24_ADC = 0; 
-
-		if ( (RAW_DATA_24_ADC & 0x800000) == 0x800000 ){
-			RAW_DATA_24_ADC = RAW_DATA_24_ADC & 0x7FFFFF;
-			RAW_DATA_24_ADC = RAW_DATA_24_ADC | 0x80000000;
-		}
-
-		DATA_24_ADC = RAW_DATA_24_ADC * (5/16777216); 
-		RAW_DATA_16_ADC = (int16_t)(DATA_24_ADC/5) * 65536;
-
-		if( RAW_DATA_16_ADC < 0){
-			data_mas[0] = (uint8_t)(RAW_DATA_16_ADC>>8);
-			data_mas[0] = data_mas[0] | 0x80;
-		}else{
-			data_mas[0] = (uint8_t)(RAW_DATA_16_ADC>>8);
-		}
-
-		data_mas[1] =  (uint8_t)RAW_DATA_16_ADC;
 
 
 
@@ -128,6 +141,7 @@ int main(void){
 
 
 /*
+	int32_t RAW_DATA_24_ADC =0x7FFFFF;//
 		if(data_mas[3]>=16){
 			if((data_mas[0]>>7) == 1){
 				data_mas[2] = data_mas[2] - 1;
