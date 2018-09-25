@@ -21,7 +21,7 @@
 
 
 
- ErrorStatus SPI_Get_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_TypeDef *SPIx);
+ ErrorStatus SPI_Get_RAW_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_TypeDef *SPIx);
 
 
 

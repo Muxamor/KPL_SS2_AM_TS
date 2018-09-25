@@ -182,17 +182,23 @@ void SetupGPIO(void){
 
 
 
-	/* Configure pins in for control COMPorators COMP1=PC0, COMP2=PC1, COMP3=PA0*/
+	/* Configure pins in for control COMPorators COMP1=PC0, COMP2=PC1, COMP3=PA0, COMP4=PA2*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-	GPIO_InitStruct.Pin = LL_GPIO_PIN_0;
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_2;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*For read value of comporator:         */
+  /* VALUE_COMP1()                        */
+  /* VALUE_COMP2()                        */
+  /* VALUE_COMP3()                        */
+  /* VALUE_COMP4()                        */
+  /*Define in SetupPeriph.h               */
 
 	/* Configure pins ???? PC8=F_SA0 PC9=F_SA1 PA8=F_SA2 for AG1411 ON=0 OFF=1 */
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_8|LL_GPIO_PIN_9;

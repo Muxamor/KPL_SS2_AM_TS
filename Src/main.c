@@ -45,7 +45,7 @@ int main(void){
 
 	uint8_t i=0, pin=1;
 	//uint8_t ADC_data_mas[3];
-	//uint8_t ADC_data_transmit[4];
+	uint8_t ADC_data_transmit[4];
 
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
@@ -88,22 +88,53 @@ int main(void){
 
     //To OD выстасить статутсный байт 
 
-/*
+
 	//Read ADC if we got ADC interrupt 
 	if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
 
 		ADC_PARAM_ptr->ADC_DRDY_flag=0;
 
-		SPI_Get_data_ADC7767 ( ADC_data_mas, 3, SPI2 );
+		//SPI_Get_RAW_data_ADC7767 ( ADC_data_mas, 3, SPI2 );
+
+ 		
 
  //////НЕ ПРАВИЛЬНОЕ ПРЕОБРАЗОВАНИЕ /////
+		int32_t RAW_DATA_24_ADC = 0x857BF6;
+		int16_t RAW_DATA_16_ADC = 0;
+		uint8_t data_mas[2] = {0};
+
+		float DATA_24_ADC = 0; 
+
+		if ( (RAW_DATA_24_ADC & 0x800000) == 0x800000 ){
+			RAW_DATA_24_ADC = RAW_DATA_24_ADC & 0x7FFFFF;
+			RAW_DATA_24_ADC = RAW_DATA_24_ADC | 0x80000000;
+		}
+
+		DATA_24_ADC = RAW_DATA_24_ADC * (5/16777216); 
+		RAW_DATA_16_ADC = (int16_t)(DATA_24_ADC/5) * 65536;
+
+		if( RAW_DATA_16_ADC < 0){
+			data_mas[0] = (uint8_t)(RAW_DATA_16_ADC>>8);
+			data_mas[0] = data_mas[0] | 0x80;
+		}else{
+			data_mas[0] = (uint8_t)(RAW_DATA_16_ADC>>8);
+		}
+
+		data_mas[1] =  (uint8_t)RAW_DATA_16_ADC;
+
+
+
+
+
+
+/*
 		if(data_mas[3]>=16){
 			if((data_mas[0]>>7) == 1){
 				data_mas[2] = data_mas[2] - 1;
 			}else{
 				data_mas[2] = data_mas[2] + 1;
 			}
-		}
+		}*/
  /////////////////////////////////////////
 
 
@@ -112,25 +143,26 @@ int main(void){
 		ADC_data_transmit[2] = data_mas[0];
 		ADC_data_transmit[3] = data_mas[1];
 
-		if( VALUE_COMP1() == 1 && VALUE_COMP2() ==1 && VALUE_COMP4() == 0){ 
-			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x00; // Error COMP1 and COMP2
-			CONF_MOD_ptr->status_module = 0x15
+		//if( VALUE_COMP1() == 1 && VALUE_COMP2() ==1 && VALUE_COMP4() == 0){ 
+		//	ADC_data_transmit[0] = ADC_data_transmit[0] | 0x00; // Error COMP1 and COMP2
+		//	CONF_MOD_ptr->status_module = 0x15
 
-		} elese if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
+		if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
 			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x04;  //Error  COMP2
-			CONF_MOD_ptr->status_module = 0x15
+			CONF_MOD_ptr->status_module = 0x15;
 
-		} elese if( VALUE_COMP1() == 1 && VALUE_COMP2() ==0 && VALUE_COMP4() == 0){  
+		} else if( VALUE_COMP1() == 1 && VALUE_COMP2() ==0 && VALUE_COMP4() == 0){  
 			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x02; //Error  COMP1
-			CONF_MOD_ptr->status_module = 0x15
+			CONF_MOD_ptr->status_module = 0x15;
 
-		} elese if( VALUE_COMP4() == 1 ){ 
+		} else if( VALUE_COMP4() == 1 ){ 
 			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x06; //Error  COMP4
-			CONF_MOD_ptr->status_module = 0x15
+			CONF_MOD_ptr->status_module = 0x15;
 
 		} else {
-			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x01 // No Error
+			ADC_data_transmit[0] = ADC_data_transmit[0] | 0x01; // No Error
 		} 
+
 
 		if( ADC_PARAM_ptr->ADC_DRDY_flag != 1 ){ // do not got sync signal
 
@@ -138,19 +170,17 @@ int main(void){
 
 			ADC_PARAM_ptr->PULSE_flag = 0;
 
-			CONF_MOD_ptr->status_module = 0x15
+			CONF_MOD_ptr->status_module = 0x15;
+
 			if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
-				CONF_MOD_ptr->status_module = 0x1D
+				CONF_MOD_ptr->status_module = 0x1D;
+				ADC_PARAM_ptr->Count_MCLK = 0x00;
+				ADC_data_transmit[1] = 0x00;
+				ADC_data_transmit[2] = 0x00;
+				ADC_data_transmit[3] = 0x00;
 			}
 
-			ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8; /// как правлиьно сообщать что пошла рассинхронизация/??
-			ADC_data_transmit[1] = 0x00;
-			ADC_data_transmit[2] = 0x00;
-			ADC_data_transmit[3] = 0x00;
-
-
-
-			//To OD выстасить статутсный байт 
+			ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8;
 		}
 
 		ADC_PARAM_ptr->ADC_DRDY_flag = 0;
@@ -162,7 +192,7 @@ int main(void){
 		//TO DO Add check start flag 
 	}
 
-	*/
+	
 /*
 	if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
 // обнулить длину буфера 
