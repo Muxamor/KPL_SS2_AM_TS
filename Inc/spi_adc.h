@@ -21,7 +21,9 @@
 
 
 
- ErrorStatus SPI_Get_RAW_data_ADC7767 ( uint8_t adc_data_mas[], uint8_t size_mas,SPI_TypeDef *SPIx);
+int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx );
+
+int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_adc );
 
 
 
