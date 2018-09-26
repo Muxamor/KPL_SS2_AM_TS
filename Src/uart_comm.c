@@ -38,7 +38,7 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
 		}
 
 		if (i==0){
-			LL_USART_TransmitData9( USARTx, 0x1FF & mass[i] );
+			LL_USART_TransmitData9( USARTx, 0x100 | mass[i] );//set 9 bit for command (first) bite 
 
 		}else{
 			LL_USART_TransmitData9( USARTx, mass[i] );
@@ -196,7 +196,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 
 	} else if( number_command == 0x05 ){ // Get command status command
 		ack_transmite_buf[1] = module_settings->status_module;
-		module_settings->status_module = 0x02;
+		module_settings->status_module = 0x01;
 		transmite_data_flag = 1;
 
 	} else{ // Error in command 

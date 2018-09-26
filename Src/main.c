@@ -43,8 +43,7 @@ _ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
 
 int main(void){
 
-	uint8_t i=0;
-	uint8_t pin=1;
+
 	uint8_t ADC_data_transmit[4];
 	int16_t RAW_DATA_16_ADC = 0;
 	int32_t RAW_DATA_24_ADC = 0;
@@ -88,87 +87,88 @@ int main(void){
 
 	CONF_MOD_ptr->status_module = 0x01;
 
-	LED_Green_HL3_ON();
+	while (1){
 
-	//Read ADC if we got ADC interrupt 
-	if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
+		LED_Green_HL3_ON();
 
-		ADC_PARAM_ptr->ADC_DRDY_flag=0;
-		RAW_DATA_24_ADC = 0;
+		//Read ADC if we got ADC interrupt 
+		if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
 
-		RAW_DATA_24_ADC = SPI_Get_RAW_data_ADC7767( SPI2 ); 
+			ADC_PARAM_ptr->ADC_DRDY_flag=0;
+			RAW_DATA_24_ADC = 0;
 
-		if(RAW_DATA_24_ADC == -1){ //SPI hardware problem
-			
-			RAW_DATA_16_ADC = 0;
-			ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8;
-			CONF_MOD_ptr->status_module = 0x05;
+			RAW_DATA_24_ADC = SPI_Get_RAW_data_ADC7767( SPI2 ); 
 
-		}else{ //No Error
+			if(RAW_DATA_24_ADC == -1){ //SPI hardware problem
 
-			RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5 );
-
-			if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
-				ADC_data_transmit[0] = 0x04;  //Error  COMP2
-				CONF_MOD_ptr->status_module = 0x15;
-
-			} else if( VALUE_COMP1() == 1 && VALUE_COMP2() ==0 && VALUE_COMP4() == 0){  
-				ADC_data_transmit[0] = 0x02; //Error  COMP1
-				CONF_MOD_ptr->status_module = 0x15;
-
-			} else if( VALUE_COMP4() == 1 ){ 
-				ADC_data_transmit[0] =  0x06; //Error  COMP4
-				CONF_MOD_ptr->status_module = 0x15;
-
-			} else {
-				ADC_data_transmit[0] = 0x01; // No Error
-			} 
-		
-
-			if( ADC_PARAM_ptr->DRDY_GOOD_flag != 1 ){ // do not got sync signal
-
-				while(ADC_PARAM_ptr->PULSE_flag == 1);
-
-				//ADC_PARAM_ptr->PULSE_flag = 0;
-				CONF_MOD_ptr->status_module = 0x15;
-
-				if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
-					CONF_MOD_ptr->status_module = 0x1D;
-					ADC_PARAM_ptr->Count_MCLK = 0x00;
-					RAW_DATA_16_ADC = 0;
-				}
-
+				RAW_DATA_16_ADC = 0;
 				ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8;
+				CONF_MOD_ptr->status_module = 0x05;
+
+			}else{ //No Error
+
+				RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5 );
+
+				if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
+					ADC_data_transmit[0] = 0x04;  //Error  COMP2
+					CONF_MOD_ptr->status_module = 0x15;
+
+				} else if( VALUE_COMP1() == 1 && VALUE_COMP2() ==0 && VALUE_COMP4() == 0){  
+					ADC_data_transmit[0] = 0x02; //Error  COMP1
+					CONF_MOD_ptr->status_module = 0x15;
+
+				} else if( VALUE_COMP4() == 1 ){ 
+					ADC_data_transmit[0] =  0x06; //Error  COMP4
+					CONF_MOD_ptr->status_module = 0x15;
+
+				} else {
+					ADC_data_transmit[0] = 0x01; // No Error
+				} 
+	
+				if( ADC_PARAM_ptr->DRDY_GOOD_flag != 1 ){ // do not got sync signal
+
+					while(ADC_PARAM_ptr->PULSE_flag == 1);
+
+					//ADC_PARAM_ptr->PULSE_flag = 0;
+					CONF_MOD_ptr->status_module = 0x15;
+
+					if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
+						CONF_MOD_ptr->status_module = 0x1D;
+						ADC_PARAM_ptr->Count_MCLK = 0x00;
+						RAW_DATA_16_ADC = 0;
+					}
+
+					ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8;
+				}
 			}
+
+			ADC_data_transmit[0] =  ADC_data_transmit[0] | (CONF_MOD_ptr->addr_module << 3);
+			ADC_data_transmit[1] = 0x00;
+			ADC_data_transmit[2] = (uint8_t)(RAW_DATA_16_ADC>>8);
+			ADC_data_transmit[3] = (uint8_t)RAW_DATA_16_ADC;
+
 		}
 
-		ADC_data_transmit[0] =  ADC_data_transmit[0] | (CONF_MOD_ptr->addr_module << 3);
-		ADC_data_transmit[1] = 0x00;
-		ADC_data_transmit[2] = (uint8_t)(RAW_DATA_16_ADC>>8);
-		ADC_data_transmit[3] = (uint8_t)RAW_DATA_16_ADC;
+	
+		//////TO DO доделать !
+		if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
+		// обнулить длину буфера 
+			if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
+				UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
+				Data_transmite_UART_9B ((uint16_t*)ADC_data_transmit, USART1);
+
+ 			} else { // parse command 
+ 				UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
+ 				UART1_BUF_ptr->UART_rec_buf_len=0;
+				Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
+
+ 			}
+		}
 
 	}
 
 	
-/*
-	if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
-// обнулить длину буфера 
-		if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
-			UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
-			Data_transmite_UART_9B (uint16_t mass[], USART1);
 
-			#ifdef DEBUGprintf
-				printf("ERROR transmitting data through UART1");
-			#endif
-
- 		} else { // parse command 
- 			UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
- 			UART1_BUF_ptr->UART_rec_buf_len=0;
-			Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
-
- 		}
-	}
-*/
 
 
 //******************below test zone******************************//
@@ -180,7 +180,8 @@ int main(void){
 		//LL_USART_TransmitData9(USART1, 0x06B);
 	//}
 
-
+	uint8_t i=0;
+	uint8_t pin=1;
 //for test
 	while(1){
 
@@ -200,14 +201,6 @@ int main(void){
 	}
 
 
-
-	
-
-
-while(1){
-  printf("Now is succsses start \r\n");
-  Error_Handler();
-}
 
 }
 
