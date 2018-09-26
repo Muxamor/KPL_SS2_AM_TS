@@ -18,6 +18,7 @@
  	uint8_t amp_factor_K2;  // value of amplifier factor K2
  	uint8_t Fcut_value; // Cutof frequency
  	uint8_t status_module; /// Спросить как првильно  по битам или просто число 
+ 	uint8_t counter_toggle_led_hl3;
 
  }_SETTINGS_MODULE;
 

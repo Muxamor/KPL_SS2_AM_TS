@@ -92,6 +92,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 	if( number_command == 0x0 ){ // Get command Start or Stop
 		if( uart_receive_buffer.UART_Recive_Buf[1] == 0xFF ){ //Satart command
 			module_settings->start_stop_ADC = 0x02; //Start ADC
+			module_settings->counter_toggle_led_hl3 = 0;
 			adc_parametrs->ADC_DRDY_flag=0; 
 			INTERRUPT_ADC_DRDY_Enable();
 
@@ -104,6 +105,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 			adc_parametrs->DRDY_GOOD_flag=0;
 			adc_parametrs->PULSE_flag=0;
 			adc_parametrs->Count_MCLK=0;
+			LED_Green_HL3_ON();
 
 		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x01 ){
 			module_settings->start_stop_ADC = 0x01; //stop with stop ADC 
@@ -114,6 +116,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 			adc_parametrs->DRDY_GOOD_flag=0;
 			adc_parametrs->PULSE_flag=0;
 			adc_parametrs->Count_MCLK=0;
+			LED_Green_HL3_ON();
 
 			//Stop procedure ADC
 			PB14_STOP_ADC_Reset();

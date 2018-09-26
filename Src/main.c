@@ -47,6 +47,7 @@ int main(void){
 	uint8_t ADC_data_transmit[4];
 	int16_t RAW_DATA_16_ADC = 0;
 	int32_t RAW_DATA_24_ADC = 0;
+	
 
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
@@ -87,9 +88,14 @@ int main(void){
 
 	CONF_MOD_ptr->status_module = 0x01;
 
+	LED_Green_HL3_ON();
+
 	while (1){
 
-		LED_Green_HL3_ON();
+		if(CONF_MOD_ptr->counter_toggle_led_hl3 == 128 ){
+			CONF_MOD_ptr->counter_toggle_led_hl3=0;
+			LED_Green_HL3_TOGGLE();
+		}
 
 		//Read ADC if we got ADC interrupt 
 		if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
@@ -146,6 +152,8 @@ int main(void){
 			ADC_data_transmit[1] = 0x00;
 			ADC_data_transmit[2] = (uint8_t)(RAW_DATA_16_ADC>>8);
 			ADC_data_transmit[3] = (uint8_t)RAW_DATA_16_ADC;
+
+			CONF_MOD_ptr->counter_toggle_led_hl3++;
 
 		}
 
