@@ -1,8 +1,5 @@
 
 /* Includes ------------------------------------------------------------------*/
-
-
-
 #include "main.h"
 #include "SetupPeriph.h"
 #include "conf_a_module.h"
@@ -12,12 +9,11 @@
 
 #include  <stdio.h>
 
-
 /****************************TODO*************************
 
-проверить на плате  настройку открытый коллектор для PB14_STOP_ADC
+1. Write flash
 
-1. в conf_a_module выяснить как работать со статусом модуля побитно или по числу status_ready;
+проверить на плате  настройку открытый коллектор для PB14_STOP_ADC
 
 3. Доделать проверки ошибоу в I2C.c (возможно и не делать так как используется только при включении)
 
@@ -26,9 +22,6 @@
 			}	
 
 			 сколько i != 1000000  по времени
-
-7. module_settings->status_module = 0x02; // или писать 0x00? 
-
 **********************************************************/
 //LL_mDelay(1);
 //LL_RCC_ClocksTypeDef check_RCC_Clocks,  *CHECK_RCC_CLOCKS=&check_RCC_Clocks; // Only for check setup clock. Not need use in release
@@ -43,12 +36,10 @@ _ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
 
 int main(void){
 
-
 	uint8_t ADC_data_transmit[4];
 	int16_t RAW_DATA_16_ADC = 0;
 	int32_t RAW_DATA_24_ADC = 0;
 	
-
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
 	//LL_RCC_GetSystemClocksFreq(CHECK_RCC_CLOCKS); // Only for check setup clock Not need use in release
@@ -72,7 +63,6 @@ int main(void){
     ADC_PARAM_ptr->Count_MCLK = 0;
     printf("Default settings. Success! \r\n");
 
-
 	LED_Yellow_HL1_ON();
 	LED_Green_HL2_ON();
 
@@ -90,7 +80,7 @@ int main(void){
 
 	LED_Green_HL3_ON();
 
-	while (1){
+	while(1){
 
 		if(CONF_MOD_ptr->counter_toggle_led_hl3 == 128 ){
 			CONF_MOD_ptr->counter_toggle_led_hl3=0;
@@ -133,12 +123,13 @@ int main(void){
 	
 				if( ADC_PARAM_ptr->DRDY_GOOD_flag != 1 ){ // do not got sync signal
 
-					while(ADC_PARAM_ptr->PULSE_flag == 1);
+					while(ADC_PARAM_ptr->PULSE_flag == SET);
 
 					//ADC_PARAM_ptr->PULSE_flag = 0;
 					CONF_MOD_ptr->status_module = 0x15;
 
 					if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
+
 						CONF_MOD_ptr->status_module = 0x1D;
 						ADC_PARAM_ptr->Count_MCLK = 0x00;
 						RAW_DATA_16_ADC = 0;
@@ -157,18 +148,16 @@ int main(void){
 
 		}
 
-	
-		//////TO DO доделать !
 		if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
-		// обнулить длину буфера 
+			UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
+			UART1_BUF_ptr->UART_rec_buf_len=0;
+
 			if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
 				UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
 				Data_transmite_UART_9B ((uint16_t*)ADC_data_transmit, USART1);
 
  			} else { // parse command 
- 				UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
- 				UART1_BUF_ptr->UART_rec_buf_len=0;
-				Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
+ 				Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
 
  			}
 		}
@@ -180,7 +169,7 @@ int main(void){
 
 
 //******************below test zone******************************//
-
+/*
 
 	LL_USART_TransmitData9(USART1, 0x16B);
 
@@ -206,7 +195,7 @@ int main(void){
 				i=0;
 			}
 		}
-	}
+	} */
 
 
 
