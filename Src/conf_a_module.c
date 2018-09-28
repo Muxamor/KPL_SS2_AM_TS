@@ -61,14 +61,14 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 	}
 
     // Control F_SAx
-	if( Fcut==10 || Fcut==20 ){
+	if( Fcut==10 /*|| Fcut==20 */){
 		F_SA0_Reset();
 		F_SA1_Reset();
 #ifdef DEBUGprintf
 			printf("Param_value=%d  Fcut=%luHz  Ficlk=%luHz  F_SA0=0 F_SA1=0\r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
 #endif
 
-	}else if ( Fcut > 20 && Fcut < 330 ){
+	}else if ( Fcut >= 20 && Fcut < 330 ){
 		F_SA0_Set();
 		F_SA1_Reset();
 #ifdef DEBUGprintf
@@ -76,10 +76,10 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 #endif
 
 	}else if( Fcut >= 330 ){
-		F_SA0_Reset();
+		F_SA0_Set();
 		F_SA1_Set();
 #ifdef DEBUGprintf
-			printf("Param_value=%d  Fcut=%luHz  Ficlk=%luHz  F_SA0=0 F_SA1=1\r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
+			printf("Param_value=%d  Fcut=%luHz  Ficlk=%luHz  F_SA0=1 F_SA1=1\r\n",par_value, (unsigned long)Fcut, (unsigned long)Ficlk );
 #endif
 
 	}
