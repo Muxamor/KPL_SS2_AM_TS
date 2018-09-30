@@ -11,17 +11,9 @@
 
 /****************************TODO*************************
 
-1. Write flash
+1. Write flash. If it will be need.
+2. Don't forget to ON WatchDog
 
-проверить на плате  настройку открытый коллектор для PB14_STOP_ADC
-
-3. Доделать проверки ошибоу в I2C.c (возможно и не делать так как используется только при включении)
-
-6. Проверить 			while( VALUE_COMP3() != RESET || i != 1000000 ){
-				i++;
-			}	
-
-			 сколько i != 1000000  по времени
 **********************************************************/
 //LL_mDelay(1);
 //LL_RCC_ClocksTypeDef check_RCC_Clocks,  *CHECK_RCC_CLOCKS=&check_RCC_Clocks; // Only for check setup clock. Not need use in release
@@ -81,6 +73,7 @@ int main(void){
 	LED_Green_HL3_ON();
 
 	while(1){
+		//LL_IWDG_ReloadCounter(IWDG);
 
 		if(CONF_MOD_ptr->counter_toggle_led_hl3 == 128 ){
 			CONF_MOD_ptr->counter_toggle_led_hl3=0;
@@ -102,7 +95,7 @@ int main(void){
 				CONF_MOD_ptr->status_module = 0x05;
 
 			}else{ //No Error
-
+			//	LL_IWDG_ReloadCounter(IWDG);
 				RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5 );
 
 				if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
@@ -157,47 +150,12 @@ int main(void){
 				Data_transmite_UART_9B ((uint16_t*)ADC_data_transmit, USART1);
 
  			} else { // parse command 
+ 				//LL_IWDG_ReloadCounter(IWDG);
  				Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
 
  			}
 		}
-
 	}
-
-	
-
-
-
-//******************below test zone******************************//
-/*
-
-	LL_USART_TransmitData9(USART1, 0x16B);
-
-	//while(1){
-		//LL_USART_TransmitData9(USART1, 0x06B);
-	//}
-
-	uint8_t i=0;
-	uint8_t pin=1;
-//for test
-	while(1){
-
-		pin=LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_13);
-
-		if(pin==0){
-			while(!LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_13)){
-
-			};
-
-			i++;
-			Set_Ficlk_and_F_SAx(i, PWM_TIM2_CH2_PA1);
-			if(i==130){
-				i=0;
-			}
-		}
-	} */
-
-
 
 }
 

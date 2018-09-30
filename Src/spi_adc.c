@@ -31,7 +31,7 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
 		counter=0;
 		while(LL_SPI_IsActiveFlag_TXE(SPIx) == RESET){
 			counter++;
-			if(counter==10000000){
+			if(counter==1000000){//150ms
 				Error_Handler();
 				goto exit_error;
 			}
@@ -40,7 +40,7 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
 		counter=0;
 		while(LL_SPI_IsActiveFlag_RXNE(SPIx) == RESET){
 			counter++;
-			if(counter==10000000){
+			if(counter==1000000){ //150ms
 				Error_Handler();
 				goto exit_error;
 			}

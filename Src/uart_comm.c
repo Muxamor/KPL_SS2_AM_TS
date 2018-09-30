@@ -31,7 +31,7 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
 		counter=0;
 		while( LL_USART_IsActiveFlag_TXE(USARTx) == RESET ){
 			counter++;
-			if(counter==100000000){
+			if(counter==1000000){//150ms
 				Error_Handler();
 				goto exit_error;
 			}
@@ -49,7 +49,7 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
 	counter=0;
 	while( LL_USART_IsActiveFlag_TC( USARTx ) == RESET ){
 		counter++;
-		if(counter==100000000){
+		if(counter==1000000){//150ms
 			Error_Handler();
 			goto exit_error;
 		}
