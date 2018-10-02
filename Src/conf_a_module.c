@@ -348,8 +348,8 @@ ErrorStatus Manual_settings(uint8_t namber_settings, enum PWR_TIMx timer_numberr
 			Set_Ficlk_and_F_SAx(70, timer_numberr);
 			break;
 
-		case 3: ////Fcut=1000
-			Set_Ficlk_and_F_SAx(100, timer_numberr);
+		case 3: ////Fcut=20
+			Set_Ficlk_and_F_SAx(2, timer_numberr);
 			break;
 
 		default:

@@ -55,8 +55,10 @@ int main(void){
     ADC_PARAM_ptr->Count_MCLK = 0;
     printf("Default settings. Success! \r\n");
 
-	LED_Yellow_HL1_ON();
-	LED_Green_HL2_ON();
+	//LED_Yellow_HL1_ON();
+	LED_Yellow_HL1_OFF();
+	//LED_Green_HL2_ON();
+	LED_Green_HL2_OFF();
 
 	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
 	
@@ -65,12 +67,31 @@ int main(void){
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
 		CONF_MOD_ptr->addr_module = 0x01;
 	} 
+
+
 	
 	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
 
 	CONF_MOD_ptr->status_module = 0x01;
 
 	LED_Green_HL3_ON();
+
+
+	//Only for setup board
+	while(1){
+
+		if( VALUE_COMP1() == 0 ||  VALUE_COMP2() == 0 ){
+			LED_Yellow_HL1_ON();
+		}else if(VALUE_COMP4() == 1){
+			LED_Green_HL2_ON();
+		}else{
+			LED_Yellow_HL1_OFF();
+			LED_Green_HL2_OFF();
+		}
+	}
+
+
+
 
 	while(1){
 		//LL_IWDG_ReloadCounter(IWDG);
