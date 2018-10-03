@@ -12,8 +12,8 @@
 #include "stm32l4xx_ll_usart.h"
 #include "stm32l4xx_ll_exti.h"
 #include "SetupPeriph.h"
-#include "spi_adc.h"
 #include "conf_a_module.h"
+#include "spi_adc.h"
 #include "uart_comm.h"
 
 

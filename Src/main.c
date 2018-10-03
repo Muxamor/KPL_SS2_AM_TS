@@ -90,9 +90,6 @@ int main(void){
 		}
 	}
 
-
-
-
 	while(1){
 		//LL_IWDG_ReloadCounter(IWDG);
 
@@ -117,7 +114,7 @@ int main(void){
 
 			}else{ //No Error
 			//	LL_IWDG_ReloadCounter(IWDG);
-				RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5 );
+				RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5,  CONF_MOD_ptr->amp_factor_K2 );
 
 				if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
 					ADC_data_transmit[0] = 0x04;  //Error  COMP2

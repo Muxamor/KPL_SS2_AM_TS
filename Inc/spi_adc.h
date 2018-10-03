@@ -23,7 +23,7 @@
 
 int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx );
 
-int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_adc );
+int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_adc, uint8_t value_amp_factor_K2 );
 
 
 
