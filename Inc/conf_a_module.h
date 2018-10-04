@@ -16,9 +16,11 @@
  	uint8_t start_stop_ADC; // 0-Stop without stop ADC,   1 - stop with stop ADC,  2 - Start ADC 
  	uint8_t amp_factor_K1;  // value of amplifier factor K1
  	uint8_t amp_factor_K2;  // value of amplifier factor K2
+ 	uint8_t saturation_math_COMP4;
  	uint8_t Fcut_value; // Cutof frequency
  	uint8_t status_module; 
  	uint8_t counter_toggle_led_hl3;
+ 	uint8_t format_data_ADC_16b_24b; // foramt for  data ADC =0 - 16 bits, =1 - 24 bits (no convert data),
 
  }_SETTINGS_MODULE;
 

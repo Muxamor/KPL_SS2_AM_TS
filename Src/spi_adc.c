@@ -8,6 +8,7 @@
 #include "stm32l4xx.h"
 #include "stm32l4xx_ll_spi.h"
 #include "SetupPeriph.h"
+#include "conf_a_module.h"
 #include "spi_adc.h"
 
 #include  <stdio.h>
@@ -74,7 +75,7 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
   * @retval 16 bit data ADC 
   */
 
-int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_adc, uint8_t value_amp_factor_K2 ){
+int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_adc, _SETTINGS_MODULE *config_module ){
 
 	//raw_data_adc_24b =  0x800001; //0x7FFFFF;//
 	int16_t RAW_DATA_16_ADC = 0;
@@ -87,11 +88,21 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_
 		raw_data_adc_24b = raw_data_adc_24b | 0xFF800000; 
 	}
 
-	if(value_amp_factor_K2 == 10 ){
+	if(config_module->amp_factor_K2 == 10 ){
 		raw_data_adc_24b = raw_data_adc_24b * 2;
 
-	} else if (value_amp_factor_K2 == 11){
+	} else if (config_module->amp_factor_K2 == 11){
 		raw_data_adc_24b = raw_data_adc_24b * 4;
+	}
+
+	if( raw_data_adc_24b > 8388607 ){
+		raw_data_adc_24b = 8388607;
+		config_module->saturation_math_COMP4 = 1;
+		
+	}else if(raw_data_adc_24b < -8388608 ){
+		raw_data_adc_24b = -8388608;
+		config_module->saturation_math_COMP4 = 1;
+
 	}
 
 	DATA_24_ADC = (((float)raw_data_adc_24b)/16777216)*Vref_adc;

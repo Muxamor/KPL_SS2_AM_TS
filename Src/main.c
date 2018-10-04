@@ -10,7 +10,7 @@
 #include  <stdio.h>
 
 /****************************TODO*************************
-
+1!!.  Read settings of module from flash 
 1. Write flash. If it will be need.
 2. Don't forget to ON WatchDog
 
@@ -47,17 +47,20 @@ int main(void){
 	//MX_IWDG_Init();
 	printf("Finish setup periphery. Success! \r\n");
 	
+	//Default configuration board;
 	PB14_STOP_ADC_Set(); 
 	PC7_MCLK_Reset();
     ADC_PARAM_ptr->ADC_DRDY_flag = 0;
     ADC_PARAM_ptr->DRDY_GOOD_flag = 0;
     ADC_PARAM_ptr->PULSE_flag = 0;
     ADC_PARAM_ptr->Count_MCLK = 0;
+
+    //TODO Read settings of module from flash.  
+   	CONF_MOD_ptr->format_data_ADC_16b_24b = 0;
+
     printf("Default settings. Success! \r\n");
 
-	//LED_Yellow_HL1_ON();
 	LED_Yellow_HL1_OFF();
-	//LED_Green_HL2_ON();
 	LED_Green_HL2_OFF();
 
 	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
@@ -68,27 +71,34 @@ int main(void){
 		CONF_MOD_ptr->addr_module = 0x01;
 	} 
 
-
-	
-	CONF_MOD_ptr-> addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
-
+	CONF_MOD_ptr->addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
 	CONF_MOD_ptr->status_module = 0x01;
 
 	LED_Green_HL3_ON();
 
-
-	//Only for setup board
+/************Only for setup board********************************/
+	uint32_t counter=0;
 	while(1){
 
-		if( VALUE_COMP1() == 0 ||  VALUE_COMP2() == 0 ){
+		if( VALUE_COMP1() == 1 ||  VALUE_COMP2() == 1 ){
 			LED_Yellow_HL1_ON();
+			counter=10000;
+
 		}else if(VALUE_COMP4() == 1){
 			LED_Green_HL2_ON();
+			counter=10000;
+
 		}else{
-			LED_Yellow_HL1_OFF();
-			LED_Green_HL2_OFF();
+			if(counter!=0){
+				counter--;
+			}
+			if(counter==1){
+				LED_Yellow_HL1_OFF();
+				LED_Green_HL2_OFF();
+			}
 		}
 	}
+/***********************************************************/
 
 	while(1){
 		//LL_IWDG_ReloadCounter(IWDG);
@@ -103,30 +113,35 @@ int main(void){
 
 			ADC_PARAM_ptr->ADC_DRDY_flag=0;
 			RAW_DATA_24_ADC = 0;
+			ADC_data_transmit[0] = 0;
 
 			RAW_DATA_24_ADC = SPI_Get_RAW_data_ADC7767( SPI2 ); 
 
 			if(RAW_DATA_24_ADC == -1){ //SPI hardware problem
 
 				RAW_DATA_16_ADC = 0;
-				ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8;
+				RAW_DATA_24_ADC = 0;
 				CONF_MOD_ptr->status_module = 0x05;
 
 			}else{ //No Error
 			//	LL_IWDG_ReloadCounter(IWDG);
-				RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5,  CONF_MOD_ptr->amp_factor_K2 );
+				
+				if(CONF_MOD_ptr->format_data_ADC_16b_24b == 0){ //16b format data ADC
+					RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5, CONF_MOD_ptr);
+				}
 
-				if( VALUE_COMP1() == 0 && VALUE_COMP2() == 1 && VALUE_COMP4() == 0){ 
+				if( VALUE_COMP1() == 1 && VALUE_COMP2() == 0 && VALUE_COMP4() == 0){ 
 					ADC_data_transmit[0] = 0x04;  //Error  COMP2
 					CONF_MOD_ptr->status_module = 0x15;
 
-				} else if( VALUE_COMP1() == 1 && VALUE_COMP2() ==0 && VALUE_COMP4() == 0){  
+				} else if( VALUE_COMP1() == 0 && VALUE_COMP2() ==1 && VALUE_COMP4() == 0){  
 					ADC_data_transmit[0] = 0x02; //Error  COMP1
 					CONF_MOD_ptr->status_module = 0x15;
 
-				} else if( VALUE_COMP4() == 1 ){ 
+				} else if( VALUE_COMP4() == 1 || CONF_MOD_ptr->saturation_math_COMP4 == 1 ){ 
 					ADC_data_transmit[0] =  0x06; //Error  COMP4
 					CONF_MOD_ptr->status_module = 0x15;
+					CONF_MOD_ptr->saturation_math_COMP4 = 0;
 
 				} else {
 					ADC_data_transmit[0] = 0x01; // No Error
@@ -146,14 +161,21 @@ int main(void){
 						RAW_DATA_16_ADC = 0;
 					}
 
-					ADC_data_transmit[0] = ADC_data_transmit[0] & 0xF8;
+					ADC_data_transmit[0] = 0;
 				}
 			}
 
 			ADC_data_transmit[0] =  ADC_data_transmit[0] | (CONF_MOD_ptr->addr_module << 3);
-			ADC_data_transmit[1] = 0x00;
-			ADC_data_transmit[2] = (uint8_t)(RAW_DATA_16_ADC>>8);
-			ADC_data_transmit[3] = (uint8_t)RAW_DATA_16_ADC;
+
+			if(CONF_MOD_ptr->format_data_ADC_16b_24b == 0){ //16b format data ADC
+				ADC_data_transmit[1] = 0x00;
+				ADC_data_transmit[2] = (uint8_t)(RAW_DATA_16_ADC>>8);
+				ADC_data_transmit[3] = (uint8_t)RAW_DATA_16_ADC;
+			}else{
+				ADC_data_transmit[1] = (uint8_t)(RAW_DATA_24_ADC>>16);//24b format data ADC
+				ADC_data_transmit[2] = (uint8_t)(RAW_DATA_24_ADC>>8);
+				ADC_data_transmit[3] = (uint8_t)RAW_DATA_24_ADC;
+			}
 
 			CONF_MOD_ptr->counter_toggle_led_hl3++;
 
