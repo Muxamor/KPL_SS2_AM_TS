@@ -151,7 +151,7 @@ int main(void){
 
 					while(ADC_PARAM_ptr->PULSE_flag == SET);
 
-					//ADC_PARAM_ptr->PULSE_flag = 0;
+					ADC_PARAM_ptr->PULSE_flag = 0;
 					CONF_MOD_ptr->status_module = 0x15;
 
 					if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
@@ -178,7 +178,6 @@ int main(void){
 			}
 
 			CONF_MOD_ptr->counter_toggle_led_hl3++;
-
 		}
 
 		if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
