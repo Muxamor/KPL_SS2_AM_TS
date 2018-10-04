@@ -106,7 +106,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 			adc_parametrs->DRDY_GOOD_flag=0;
 			adc_parametrs->PULSE_flag=0;
 			adc_parametrs->Count_MCLK=0;
-			LED_Green_HL3_ON();////????????????????
+			LED_Green_HL3_ON();
 
 		} else if( uart_receive_buffer.UART_Recive_Buf[1] == 0x01 ){
 			module_settings->start_stop_ADC = 0x01; //stop with stop ADC 
@@ -117,7 +117,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 			adc_parametrs->DRDY_GOOD_flag=0;
 			adc_parametrs->PULSE_flag=0;
 			adc_parametrs->Count_MCLK=0;
-			LED_Green_HL3_ON();////??????????????????
+			LED_Green_HL3_ON();
 
 			//Stop procedure ADC
 			PB14_STOP_ADC_Reset();

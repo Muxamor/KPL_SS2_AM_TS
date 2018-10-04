@@ -84,14 +84,15 @@ int main(void){
 			LED_Yellow_HL1_ON();
 			counter=10000;
 
-		}else if(VALUE_COMP4() == 1){
+		}else if( VALUE_COMP4() == 1 ){
 			LED_Green_HL2_ON();
 			counter=10000;
 
 		}else{
-			if(counter!=0){
+			if( counter != 0 ){
 				counter--;
 			}
+
 			if(counter==1){
 				LED_Yellow_HL1_OFF();
 				LED_Green_HL2_OFF();
@@ -190,9 +191,9 @@ int main(void){
 
  			} else { // parse command 
  				//LL_IWDG_ReloadCounter(IWDG);
- 				Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr , PWM_TIM2_CH2_PA1, USART1);
+ 				Parser_command ( *UART1_BUF_ptr, CONF_MOD_ptr, ADC_PARAM_ptr, PWM_TIM2_CH2_PA1, USART1 );
 
- 			}
+  			}
 		}
 	}
 
