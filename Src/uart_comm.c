@@ -1,4 +1,4 @@
-/*
+ /*
  * uart_comm.c
  *
  *  Created on: Jul 10, 2018
@@ -202,6 +202,33 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 		ack_transmite_buf[1] = module_settings->status_module;
 		module_settings->status_module = 0x01;
 		transmite_data_flag = 1;
+
+	} else if(number_command == 0x07){
+
+		switch(uart_receive_buffer.UART_Recive_Buf[1]){
+
+			case 0x43: //Set ADC data format
+				if( uart_receive_buffer.UART_Recive_Buf[3] == 0 ){
+					module_settings->format_data_ADC_16b_24b = 0; //Set 16 bit format
+				}else{
+					module_settings->format_data_ADC_16b_24b = 1; //Set 24 bit format
+				}
+				ack_transmite_buf[1] = 0x01;
+				transmite_data_flag = 1;
+				break;
+
+			case 0x83: //Read ADC data format
+
+				ack_transmite_buf[1] = 0x01;
+				ack_transmite_buf[2] = 0x00;
+				if( module_settings->format_data_ADC_16b_24b == 0 ){
+					ack_transmite_buf[3] = 0x00;
+				}else{
+					ack_transmite_buf[3] = 0x18;
+				}
+				transmite_data_flag = 1;
+				break;
+		}
 
 	} else{ // Error in command 
 		ack_transmite_buf[1] = 0x00;
