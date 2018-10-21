@@ -547,7 +547,7 @@ void SetupInterrupt(void){
 
   	/* Setup USART1 interrupt Init */
   	NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0)); //Set priority №1 from 0..15
- 	LL_USART_EnableIT_RXNE(USART1); //Enable RX no empty Interrupt
+ 	  LL_USART_EnableIT_RXNE(USART1); //Enable RX no empty Interrupt
   	//LL_USART_DisableIT_RXNE(USART1);
   	NVIC_EnableIRQ(USART1_IRQn);
   	/**********************************************/
