@@ -27,10 +27,21 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
 	while(LL_SPI_IsActiveFlag_BSY(SPIx)==SET); //check that SPI not busy 
 
 	for(uint8_t i=0; i<3; i++){
-		LL_SPI_TransmitData8(SPIx, 0x00);
 
 		counter=0;
-		while(LL_SPI_IsActiveFlag_TXE(SPIx) == RESET){
+		while(LL_SPI_IsActiveFlag_TXE(SPI2) == RESET){
+			counter++;
+			if(counter==1000000){ //150ms
+				Error_Handler();
+				goto exit_error;
+			}
+
+		}
+
+		LL_SPI_TransmitData8(SPIx, 0xAA);
+
+		counter=0;
+		while(LL_SPI_IsActiveFlag_BSY(SPI2)==SET){
 			counter++;
 			if(counter==1000000){//150ms
 				Error_Handler();
@@ -53,9 +64,8 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
 
 	data_adc_raw = (adc_data_mas[0]<<16) | (adc_data_mas[1]<<8) | (adc_data_mas[2]);
 
-
 	#ifdef DEBUGprintf
-			printf("RAW_Data_AD7767=%lu \r\n",(unsigned long)data_adc_raw);
+			printf("\r\nRAW_DATA_ADC7767_24b_HEX = 0x%.6lX\r\n",((unsigned long)data_adc_raw));
 	#endif
 
 	return data_adc_raw;
@@ -75,7 +85,7 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
   * @retval 16 bit data ADC 
   */
 
-int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_adc, _SETTINGS_MODULE *config_module ){
+int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_adc, _SETTINGS_MODULE *config_module ){
 
 	//raw_data_adc_24b =  0x800001; //0x7FFFFF;//
 	int16_t RAW_DATA_16_ADC = 0;
@@ -105,9 +115,9 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_
 
 	}
 
-	DATA_24_ADC = (((float)raw_data_adc_24b)/16777216)*Vref_adc;
+	DATA_24_ADC = ( ( (float)raw_data_adc_24b)/16777216.0)*Vref_adc;
 
-	DATA_16_ADC = ((DATA_24_ADC* 65536)/Vref_adc);
+	DATA_16_ADC = ((DATA_24_ADC* 65536.0)/Vref_adc);
 
 	if(DATA_16_ADC<0){
 		if(DATA_16_ADC > -32768){
@@ -122,8 +132,22 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, uint8_t Vref_
 	//RAW_DATA_16_ADC = (int16_t)((DATA_24_ADC* 65536)/Vref_adc);
 	RAW_DATA_16_ADC = (int16_t)DATA_16_ADC;
 
-	#ifdef DEBUGprintf
-			printf("DATA_ADC_24b=%f \r\n DATA_16_ADC =%f \r\n DATA_16_ADC = %lu \r\n", DATA_24_ADC, DATA_16_ADC, (signed long)RAW_DATA_16_ADC );
+	#ifdef DEBUGprintf //%.2f
+			int32_t DATA_24_ADC_desatci;
+			float DATA_24_ADC_sotni;
+
+			DATA_24_ADC_desatci = (int32_t)DATA_24_ADC;
+
+			DATA_24_ADC_sotni = (DATA_24_ADC - DATA_24_ADC_desatci)*10000.0;
+
+			if( DATA_24_ADC_desatci<0 || DATA_24_ADC_sotni<0 ){
+
+				DATA_24_ADC_desatci = DATA_24_ADC_desatci*-1;
+				DATA_24_ADC_sotni =  DATA_24_ADC_sotni*-1;
+				printf("DATA_ADC_24b = -%lu.%.4lu V\r\nRAW_DATA_ADC_16b_HEX = 0x%.4hX\r\n", (unsigned long)DATA_24_ADC_desatci, (unsigned long)DATA_24_ADC_sotni, (signed short)RAW_DATA_16_ADC );
+			}else{
+				printf("DATA_ADC_24b = %lu.%.4lu V\r\nRAW_DATA_ADC_16b_HEX = 0x%.4hX\r\n", (unsigned long)DATA_24_ADC_desatci, (unsigned long)DATA_24_ADC_sotni, (signed short)RAW_DATA_16_ADC );
+			}
 	#endif
 
 	return RAW_DATA_16_ADC;

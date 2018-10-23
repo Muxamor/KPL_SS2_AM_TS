@@ -179,7 +179,7 @@ void USART1_IRQHandler(void){
 
     uint16_t input_data9b = 0;
     uint8_t input_data8b = 0;
-   
+
     if(LL_USART_IsActiveFlag_RXNE(USART1)){
 
         input_data9b = LL_USART_ReceiveData9(USART1);

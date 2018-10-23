@@ -314,13 +314,13 @@ void USART1_Init(void){
             - Hardware flow control disabled (RTS and CTS signals)
             - Receive and transmit enabled
       */
-  	USART_InitStruct.BaudRate = 5000000;
+  	USART_InitStruct.BaudRate = 10000000;
   	USART_InitStruct.DataWidth =  LL_USART_DATAWIDTH_9B;
   	USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
   	USART_InitStruct.Parity = LL_USART_PARITY_NONE;
   	USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
   	USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
-  	USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
+  	USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_8;
   	LL_USART_Init(USART1, &USART_InitStruct);
 
   	LL_USART_SetTXRXSwap(USART1, LL_USART_TXRX_SWAPPED);
@@ -350,7 +350,7 @@ void USART1_Init(void){
 */
 void SPI2_Init(void){
 
-	LL_SPI_Disable(SPI2); ///Возможно убрать после теста
+	//LL_SPI_Disable(SPI2); ///Возможно убрать после теста
 
   	LL_SPI_InitTypeDef SPI_InitStruct;
 
@@ -386,16 +386,18 @@ void SPI2_Init(void){
   	SPI_InitStruct.TransferDirection = LL_SPI_FULL_DUPLEX;
   	SPI_InitStruct.Mode = LL_SPI_MODE_MASTER;
   	SPI_InitStruct.DataWidth = LL_SPI_DATAWIDTH_8BIT;
-  	SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW;
-  	SPI_InitStruct.ClockPhase = LL_SPI_PHASE_2EDGE;
+  	SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW; //LL_SPI_POLARITY_HIGH;//
+  	SPI_InitStruct.ClockPhase = LL_SPI_PHASE_2EDGE; //LL_SPI_PHASE_1EDGE ;//
   	SPI_InitStruct.NSS = LL_SPI_NSS_HARD_OUTPUT;
-  	SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV2; /// Скорость обмена нужно уточнить у Саши
+  	SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV2;
   	SPI_InitStruct.BitOrder = LL_SPI_MSB_FIRST;
   	SPI_InitStruct.CRCCalculation = LL_SPI_CRCCALCULATION_DISABLE;
-  	SPI_InitStruct.CRCPoly = 0;//7;
+  	SPI_InitStruct.CRCPoly = 7;//0;//7;
   	LL_SPI_Init(SPI2, &SPI_InitStruct);
 
   	LL_SPI_SetStandard(SPI2, LL_SPI_PROTOCOL_MOTOROLA);
+
+  	LL_SPI_SetRxFIFOThreshold(SPI2, LL_SPI_RX_FIFO_TH_QUARTER);
 
   	LL_SPI_EnableNSSPulseMgt(SPI2);
 
