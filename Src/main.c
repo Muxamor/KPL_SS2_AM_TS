@@ -155,14 +155,14 @@ int main(void){
 					ADC_PARAM_ptr->PULSE_flag = 0;
 					CONF_MOD_ptr->status_module = 0x15;
 
-					if(ADC_PARAM_ptr->Count_MCLK  == 8 ){
-
+					if(ADC_PARAM_ptr->Count_MCLK  == 8 ){ // counter in interrupt
+						LED_Yellow_HL1_ON();
 						CONF_MOD_ptr->status_module = 0x1D;
 						ADC_PARAM_ptr->Count_MCLK = 0x00;
 						RAW_DATA_16_ADC = 0;
 					}
 
-					ADC_data_transmit[0] = 0;
+					ADC_data_transmit[0] = 0; //Set error flag in the parsel
 				}
 			}
 

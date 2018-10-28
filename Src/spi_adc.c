@@ -133,20 +133,20 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_ad
 	RAW_DATA_16_ADC = (int16_t)DATA_16_ADC;
 
 	#ifdef DEBUGprintf //%.2f
-			int32_t DATA_24_ADC_desatci;
-			float DATA_24_ADC_sotni;
+			int16_t DATA_24_ADC_tens;
+			float DATA_24_ADC_hundreds;
 
-			DATA_24_ADC_desatci = (int32_t)DATA_24_ADC;
+			DATA_24_ADC_tens = (int32_t)DATA_24_ADC;
 
-			DATA_24_ADC_sotni = (DATA_24_ADC - DATA_24_ADC_desatci)*10000.0;
+			DATA_24_ADC_hundreds = (DATA_24_ADC - DATA_24_ADC_tens)*1000000.0;
 
-			if( DATA_24_ADC_desatci<0 || DATA_24_ADC_sotni<0 ){
+			if( DATA_24_ADC_tens < 0 || DATA_24_ADC_hundreds < 0 ){
 
-				DATA_24_ADC_desatci = DATA_24_ADC_desatci*-1;
-				DATA_24_ADC_sotni =  DATA_24_ADC_sotni*-1;
-				printf("DATA_ADC_24b = -%lu.%.4lu V\r\nRAW_DATA_ADC_16b_HEX = 0x%.4hX\r\n", (unsigned long)DATA_24_ADC_desatci, (unsigned long)DATA_24_ADC_sotni, (signed short)RAW_DATA_16_ADC );
+				DATA_24_ADC_tens = DATA_24_ADC_tens * -1;
+				DATA_24_ADC_hundreds =  DATA_24_ADC_hundreds * -1;
+				printf("DATA_ADC_24b = -%hu.%.6lu V\r\nRAW_DATA_ADC_16b_HEX = 0x%.4hX\r\n", (unsigned short)DATA_24_ADC_tens, (unsigned long)DATA_24_ADC_hundreds, (signed short)RAW_DATA_16_ADC );
 			}else{
-				printf("DATA_ADC_24b = %lu.%.4lu V\r\nRAW_DATA_ADC_16b_HEX = 0x%.4hX\r\n", (unsigned long)DATA_24_ADC_desatci, (unsigned long)DATA_24_ADC_sotni, (signed short)RAW_DATA_16_ADC );
+				printf("DATA_ADC_24b = %hu.%.6lu V\r\nRAW_DATA_ADC_16b_HEX = 0x%.4hX\r\n", (unsigned short)DATA_24_ADC_tens, (unsigned long)DATA_24_ADC_hundreds, (signed short)RAW_DATA_16_ADC );
 			}
 	#endif
 
