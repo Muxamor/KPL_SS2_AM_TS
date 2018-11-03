@@ -55,6 +55,11 @@ int main(void){
     ADC_PARAM_ptr->PULSE_flag = 0;
     ADC_PARAM_ptr->Count_MCLK = 0;
 
+    UART1_BUF_ptr->UART_rec_buf_len = 0; 
+    UART1_BUF_ptr->recive_data_permit_flag = 0; 
+    UART1_BUF_ptr->received_command_flag = 0;
+    UART1_BUF_ptr->ADC_data_request_flag = 0;
+
     //TODO Read settings of module from flash.  
    	CONF_MOD_ptr->format_data_ADC_16b_24b = 0;
 
@@ -63,7 +68,7 @@ int main(void){
 	LED_Yellow_HL1_OFF();
 	LED_Green_HL2_OFF();
 
-	CONF_MOD_ptr->addr_module =I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
+	CONF_MOD_ptr->addr_module = I2C_Read_addr_a_module(I2C1, ADDR_I2C_TCA9554PWR);	
 	
 	// Manual settings if jumper is set
 	if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
