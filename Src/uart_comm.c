@@ -22,7 +22,7 @@
 #include  <stdio.h>
 
 
-ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
+ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 
 	uint32_t counter=0;
 
@@ -38,7 +38,7 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
 		}
 
 		if (i==0){
-			LL_USART_TransmitData9( USARTx, 0x100 | mass[i] );//set 9 bit for command (first) bite 
+			LL_USART_TransmitData9( USARTx, 0x100 | ( (uint16_t) (mass[i]) ) );//set 9 bit for command (first) bite
 
 		}else{
 			LL_USART_TransmitData9( USARTx, mass[i] );
@@ -237,7 +237,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 	}
 
 	if( transmite_data_flag == 1 ){
-		Data_transmite_UART_9B ((uint16_t*) ack_transmite_buf, USARTx);
+		Data_transmite_UART_9B ( ack_transmite_buf, USARTx);
 	}
 
 }

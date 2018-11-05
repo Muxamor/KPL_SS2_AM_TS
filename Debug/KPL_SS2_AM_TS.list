@@ -10567,7 +10567,7 @@ int main(void){
  800452e:	681b      	ldr	r3, [r3, #0]
  8004530:	2200      	movs	r2, #0
  8004532:	71da      	strb	r2, [r3, #7]
-				Data_transmite_UART_9B ((uint16_t*)ADC_data_transmit, USART1);
+				Data_transmite_UART_9B (ADC_data_transmit, USART1);
  8004534:	1d3b      	adds	r3, r7, #4
  8004536:	4910      	ldr	r1, [pc, #64]	; (8004578 <main+0x394>)
  8004538:	4618      	mov	r0, r3
@@ -12359,7 +12359,7 @@ __STATIC_INLINE void LL_USART_TransmitData9(USART_TypeDef *USARTx, uint16_t Valu
 #include  <stdio.h>
 
 
-ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
+ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
  8004fc0:	b580      	push	{r7, lr}
  8004fc2:	b084      	sub	sp, #16
  8004fc4:	af00      	add	r7, sp, #0
@@ -12408,12 +12408,12 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
  8004ffe:	7afb      	ldrb	r3, [r7, #11]
  8005000:	2b00      	cmp	r3, #0
  8005002:	d10c      	bne.n	800501e <Data_transmite_UART_9B+0x5e>
-			LL_USART_TransmitData9( USARTx, 0x100 | mass[i] );//set 9 bit for command (first) bite 
+			LL_USART_TransmitData9( USARTx, 0x100 | ( (uint16_t) (mass[i]) ) );//set 9 bit for command (first) bite
  8005004:	7afb      	ldrb	r3, [r7, #11]
- 8005006:	005b      	lsls	r3, r3, #1
- 8005008:	687a      	ldr	r2, [r7, #4]
- 800500a:	4413      	add	r3, r2
- 800500c:	881b      	ldrh	r3, [r3, #0]
+ 8005006:	687a      	ldr	r2, [r7, #4]
+ 8005008:	4413      	add	r3, r2
+ 800500a:	781b      	ldrb	r3, [r3, #0]
+ 800500c:	b29b      	uxth	r3, r3
  800500e:	f443 7380 	orr.w	r3, r3, #256	; 0x100
  8005012:	b29b      	uxth	r3, r3
  8005014:	4619      	mov	r1, r3
@@ -12424,10 +12424,10 @@ ErrorStatus Data_transmite_UART_9B (uint16_t mass[], USART_TypeDef *USARTx){
 		}else{
 			LL_USART_TransmitData9( USARTx, mass[i] );
  800501e:	7afb      	ldrb	r3, [r7, #11]
- 8005020:	005b      	lsls	r3, r3, #1
- 8005022:	687a      	ldr	r2, [r7, #4]
- 8005024:	4413      	add	r3, r2
- 8005026:	881b      	ldrh	r3, [r3, #0]
+ 8005020:	687a      	ldr	r2, [r7, #4]
+ 8005022:	4413      	add	r3, r2
+ 8005024:	781b      	ldrb	r3, [r3, #0]
+ 8005026:	b29b      	uxth	r3, r3
  8005028:	4619      	mov	r1, r3
  800502a:	6838      	ldr	r0, [r7, #0]
  800502c:	f7ff ff90 	bl	8004f50 <LL_USART_TransmitData9>
@@ -12946,7 +12946,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
  8005306:	7dfb      	ldrb	r3, [r7, #23]
  8005308:	2b01      	cmp	r3, #1
  800530a:	d105      	bne.n	8005318 <Parser_command+0x290>
-		Data_transmite_UART_9B ((uint16_t*) ack_transmite_buf, USARTx);
+		Data_transmite_UART_9B ( ack_transmite_buf, USARTx);
  800530c:	f107 0310 	add.w	r3, r7, #16
  8005310:	6af9      	ldr	r1, [r7, #44]	; 0x2c
  8005312:	4618      	mov	r0, r3

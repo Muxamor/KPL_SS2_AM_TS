@@ -192,7 +192,7 @@ int main(void){
 
 			if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
 				UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
-				Data_transmite_UART_9B ((uint16_t*)ADC_data_transmit, USART1);
+				Data_transmite_UART_9B (ADC_data_transmit, USART1);
 
  			} else { // parse command 
  				//LL_IWDG_ReloadCounter(IWDG);
