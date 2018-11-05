@@ -18,6 +18,7 @@ void LL_Init(void);
 void SystemClock_Config(void);
 void SetupLED(void);
 void SetupGPIO(void);
+void Set_Output_mode_PD2(void);
 void USART1_Init(void);
 void SPI2_Init(void);
 void I2C1_Init(void);
@@ -97,6 +98,11 @@ void MX_IWDG_Init(void);
 #define PB10_G3_Reset() 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_10)
 #define PB11_G4_Set() 			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_11)
 #define PB11_G4_Reset() 		LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_11)
+
+/*For Set Reset PD2 need use:   */
+#define PD2_Set()          LL_GPIO_SetOutputPin(GPIOD, LL_GPIO_PIN_2)
+#define PD2_Reset()        LL_GPIO_ResetOutputPin(GPIOD, LL_GPIO_PIN_2)
+
 
 /*For read value of comporator:                                          */
 #define VALUE_COMP1()       LL_GPIO_IsInputPinSet(GPIOC, LL_GPIO_PIN_0)

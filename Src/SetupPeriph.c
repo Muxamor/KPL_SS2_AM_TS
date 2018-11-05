@@ -256,6 +256,15 @@ void SetupGPIO(void){
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+	/* Configure pins D2 like uotput  */
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
+	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+
 	/* Configure pins STOP-ADC out: PB14= STOP-ADC*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_14;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
@@ -284,6 +293,25 @@ void SetupGPIO(void){
 	/*Define in SetupPeriph.h                     */
 
 }
+
+void Set_Output_mode_PD2(void){
+
+	LL_GPIO_InitTypeDef GPIO_InitStruct;
+
+	/* Configure pins PD2 like uotput  */
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
+	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+	LL_GPIO_ResetOutputPin(GPIOD, LL_GPIO_PIN_2);
+
+	/*For Set Reset PD2 need use:   */
+	/*PD2_Set();					*/
+	/*PD2_Reset();					*/
+}	
 
 void USART1_Init(void){
 

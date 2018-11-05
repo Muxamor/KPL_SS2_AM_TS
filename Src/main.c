@@ -74,6 +74,8 @@ int main(void){
 	if( LL_GPIO_IsInputPinSet(GPIOD, LL_GPIO_PIN_2) == RESET ){ //check jumper
 		Manual_settings(CONF_MOD_ptr->addr_module, PWM_TIM2_CH2_PA1);
 		CONF_MOD_ptr->addr_module = 0x01;
+	}else{
+		Set_Output_mode_PD2();
 	} 
 
 	CONF_MOD_ptr->addr_module_req_data_adc = (CONF_MOD_ptr->addr_module << 3)| 0x01;
@@ -116,6 +118,8 @@ int main(void){
 
 		//Read ADC if we got ADC interrupt 
 		if(CONF_MOD_ptr->start_stop_ADC == 0x02 && ADC_PARAM_ptr->ADC_DRDY_flag==1 ){
+
+			PD2_Set(); // For to measure processing time
 
 			ADC_PARAM_ptr->ADC_DRDY_flag=0;
 			RAW_DATA_24_ADC = 0;
@@ -184,6 +188,8 @@ int main(void){
 			}
 
 			CONF_MOD_ptr->counter_toggle_led_hl3++;
+
+			PD2_Reset(); // For to measure processing time
 		}
 
 		if(UART1_BUF_ptr->received_command_flag == SET){ //Get Command
