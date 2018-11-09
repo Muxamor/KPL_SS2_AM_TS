@@ -30,10 +30,12 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 
 	Fcut=par_value*10;// cutoff frequency of low-pass filter (Hz)
 
-	if(Fcut==10){
-		Ficlk=1300;//Hz
-	}else if(Fcut>=1270){
-		Ficlk=130000;//Hz
+	if(Fcut == 10){
+		Ficlk = 1300;//Hz
+		
+	}else if(Fcut >= 1270){
+		Ficlk = 130000;//Hz
+
 	}else{
 		//Ficlk = ( ((Fcut%50)==0) ? ((Fcut<1000) ? (Fcut=Fcut+5) : (Fcut=Fcut+50)) : Fcut )*100;
 		Ficlk = ( ((Fcut%50)==0) ? (Fcut=Fcut+5): Fcut )*100;
