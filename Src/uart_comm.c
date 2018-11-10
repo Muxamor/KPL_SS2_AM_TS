@@ -26,6 +26,13 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 
 	uint32_t counter=0;
 
+	//Enable_transmit_USART1();
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_12);
+	__NOP();
+	__NOP();
+
+
+
 	for ( uint8_t i=0 ; i<4; i++ ){
 
 		counter=0;
@@ -55,14 +62,15 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 		}
 	}
 
+	Disable_transmit_USART1();
 	return SUCCESS;
 
 	exit_error:
-
 	#ifdef DEBUGprintf
 			printf("ERROR transmitting data through UART1");
 	#endif
 
+	Disable_transmit_USART1();
 	return ERROR;
 }
 

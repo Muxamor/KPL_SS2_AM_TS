@@ -256,14 +256,6 @@ void SetupGPIO(void){
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
 	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-	/* Configure pins D2 like uotput  */
-	GPIO_InitStruct.Pin = LL_GPIO_PIN_2;
-	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-	GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
-	LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
 
 	/* Configure pins STOP-ADC out: PB14= STOP-ADC*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_14;
@@ -359,7 +351,7 @@ void USART1_Init(void){
     /* Configure pins RE and TE to control transfer data throughISO3086DW, PA11=RE PA12=DE */
     GPIO_InitStruct.Pin = LL_GPIO_PIN_11|LL_GPIO_PIN_12;
     GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
     LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -367,7 +359,7 @@ void USART1_Init(void){
     //RE -Enable when low
     //TE - Enbale when high
     LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_11); //Enable receive data
-    LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_12); //Enable transmit data
+    LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_12); //Disable transmit data
 
 }
 

@@ -128,7 +128,11 @@ void MX_IWDG_Init(void);
 
 /*For enable/desible interrupt PULSE need use:                  */
 #define INTERRUPT_PULSE_Enable()           LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_8)                
-#define INTERRUPT_PULSE_Disable()          LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_8)             
+#define INTERRUPT_PULSE_Disable()          LL_EXTI_DisableIT_0_31(LL_EXTI_LINE_8)
+
+/*For enable/desible transmit throught USART1:                  */
+#define Enable_transmit_USART1()  LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_12) //Enable transmit data
+#define Disable_transmit_USART1() LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_12) //Enable transmit data
 
 
 
