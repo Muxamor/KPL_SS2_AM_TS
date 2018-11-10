@@ -361,6 +361,10 @@ void USART1_Init(void){
     LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_11); //Enable receive data
     LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_12); //Disable transmit data
 
+    /*For enable/desible transmit throught USART1:                  */
+	//Enable_transmit_USART1()  //Enable transmit data
+    //Disable_transmit_USART1() //Disable transmit data
+
 }
 
 /**
