@@ -29,6 +29,7 @@ _ADC_PARAMETERS adc_param, *ADC_PARAM_ptr=&adc_param;
 int main(void){
 
 	uint8_t ADC_data_transmit[4];
+
 	int16_t RAW_DATA_16_ADC = 0;
 	int32_t RAW_DATA_24_ADC = 0;
 	
