@@ -30,11 +30,20 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_12);
 	__NOP();
 
+	counter=0;
+	while( LL_USART_IsActiveFlag_TXE(USARTx) == RESET ){
+		counter++;
+		if(counter==1000000){//150ms
+			Error_Handler();
+			goto exit_error;
+		}
+	}
+
 
 	for ( uint8_t i=0 ; i<4; i++ ){
 
 		counter=0;
-		while( LL_USART_IsActiveFlag_TXE(USARTx) == RESET ){
+		while( LL_USART_IsActiveFlag_TC( USARTx ) == RESET ){
 			counter++;
 			if(counter==1000000){//150ms
 				Error_Handler();
@@ -60,7 +69,11 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 		}
 	}
 
-	Disable_transmit_USART1();
+	//Disable_transmit_USART1();
+	__NOP();
+	LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_12);
+
+
 	return SUCCESS;
 
 	exit_error:

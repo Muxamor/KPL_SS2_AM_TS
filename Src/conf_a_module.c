@@ -147,7 +147,7 @@ ErrorStatus Set_Amp_Factor_K1(uint8_t namber_value){
 ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 
 	uint16_t K2=0;
-	
+
 	switch(namber_value){
 
 		case 0: // Set K2=1

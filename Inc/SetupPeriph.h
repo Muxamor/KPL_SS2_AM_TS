@@ -5,7 +5,7 @@
 #ifndef __SETUPPERIPH_H
 #define __SETUPPERIPH_H
 
-#define DEBUGprintf // Enable printf() message  to SWO
+//#define DEBUGprintf // Enable printf() message  to SWO
 
 
 #define ADDR_I2C_TCA9554PWR 0x20 // Enable printf() message  to SWO

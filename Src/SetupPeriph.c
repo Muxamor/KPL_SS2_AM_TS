@@ -161,7 +161,7 @@ void SetupGPIO(void){
 	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
 	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOC);
 	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB);
-  LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOD);
+	LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOD);
 
 
 	/* Configure pins out for control preamplifier K1. PA3=10 PA4=100 PA5=1000 for AG1411 ON=0 OFF=1    */
@@ -260,7 +260,7 @@ void SetupGPIO(void){
 	/* Configure pins STOP-ADC out: PB14= STOP-ADC*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_14;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;//LL_GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;//LL_GPIO_OUTPUT_PUSHPULL;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -274,7 +274,7 @@ void SetupGPIO(void){
 	/* Configure pins MCLK+1 out: PC7= MCLK+1*/
 	GPIO_InitStruct.Pin = LL_GPIO_PIN_7;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;//LL_GPIO_SPEED_FREQ_HIGH;
 	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
 	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
 	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -320,7 +320,7 @@ void USART1_Init(void){
   	*/
   	GPIO_InitStruct.Pin = LL_GPIO_PIN_9|LL_GPIO_PIN_10;
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
   	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_7;
@@ -345,13 +345,14 @@ void USART1_Init(void){
 
   	LL_USART_SetTXRXSwap(USART1, LL_USART_TXRX_SWAPPED);
 
+  	LL_USART_EnableOverrunDetect(USART1);
   	LL_USART_ConfigAsyncMode(USART1); 
   	LL_USART_Enable(USART1);
 
     /* Configure pins RE and TE to control transfer data throughISO3086DW, PA11=RE PA12=DE */
     GPIO_InitStruct.Pin = LL_GPIO_PIN_11|LL_GPIO_PIN_12;
     GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;//LL_GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
     LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -392,7 +393,7 @@ void SPI2_Init(void){
   	*/
   	GPIO_InitStruct.Pin = LL_GPIO_PIN_2|LL_GPIO_PIN_3;
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
   	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_5;
@@ -400,7 +401,7 @@ void SPI2_Init(void){
 
   	GPIO_InitStruct.Pin = LL_GPIO_PIN_12|LL_GPIO_PIN_13;
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
   	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_5;
@@ -450,7 +451,7 @@ void I2C1_Init(void){
   	*/
   	GPIO_InitStruct.Pin = LL_GPIO_PIN_6|LL_GPIO_PIN_7;
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
   	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
   	GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   	GPIO_InitStruct.Alternate = LL_GPIO_AF_4;

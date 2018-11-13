@@ -218,6 +218,13 @@ void USART1_IRQHandler(void){
 
     }
 
+
+    if( LL_USART_IsActiveFlag_ORE(USART1)){
+    	LL_USART_ClearFlag_ORE(USART1);
+    	LL_USART_ReceiveData9(USART1); ////????????????????
+    }
+
+
   // LL_USART_RequestRxDataFlush(USART1); -- на слуяай если не вычитываем пришедшие данные
 
   	/*
