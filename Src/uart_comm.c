@@ -28,7 +28,7 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 
 	//Enable_transmit_USART1();
 	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_12);
-	__NOP();
+	LL_mDelay(1);
 
 	counter=0;
 	while( LL_USART_IsActiveFlag_TXE(USARTx) == RESET ){
