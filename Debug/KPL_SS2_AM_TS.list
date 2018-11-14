@@ -21,9 +21,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   8 .ARM.attributes 00000030  00000000  00000000  00020074  2**0
                   CONTENTS, READONLY
-  9 .debug_info   0000e0f6  00000000  00000000  000200a4  2**0
+  9 .debug_info   0000e0f8  00000000  00000000  000200a4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 000022f4  00000000  00000000  0002e19a  2**0
+ 10 .debug_abbrev 000022f4  00000000  00000000  0002e19c  2**0
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_aranges 00000d38  00000000  00000000  00030490  2**3
                   CONTENTS, READONLY, DEBUGGING
@@ -31,9 +31,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  13 .debug_line   0000542b  00000000  00000000  00031de8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    000038a3  00000000  00000000  00037213  2**0
+ 14 .debug_str    000038a5  00000000  00000000  00037213  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .comment      0000007c  00000000  00000000  0003aab6  2**0
+ 15 .comment      0000007c  00000000  00000000  0003aab8  2**0
                   CONTENTS, READONLY
  16 .debug_frame  00003f50  00000000  00000000  0003ab34  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -7731,8 +7731,8 @@ void USART1_Init(void){
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
  8003272:	2302      	movs	r3, #2
  8003274:	60bb      	str	r3, [r7, #8]
-  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
- 8003276:	2302      	movs	r3, #2
+  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+ 8003276:	2303      	movs	r3, #3
  8003278:	60fb      	str	r3, [r7, #12]
   	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
  800327a:	2300      	movs	r3, #0
@@ -8013,8 +8013,8 @@ void I2C1_Init(void){
   	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
  8003408:	2302      	movs	r3, #2
  800340a:	60bb      	str	r3, [r7, #8]
-  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
- 800340c:	2301      	movs	r3, #1
+  	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//LL_GPIO_SPEED_FREQ_VERY_HIGH;
+ 800340c:	2302      	movs	r3, #2
  800340e:	60fb      	str	r3, [r7, #12]
   	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
  8003410:	2301      	movs	r3, #1
