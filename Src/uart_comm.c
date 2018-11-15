@@ -38,7 +38,7 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 	counter=0;
 	while( LL_USART_IsActiveFlag_TXE(USARTx) == RESET ){
 		counter++;
-		if(counter==1000000){//150ms
+		if(counter==40000){//150ms
 			Error_Handler();
 			goto exit_error;
 		}
@@ -49,7 +49,7 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 		counter=0;
 		while( LL_USART_IsActiveFlag_TC( USARTx ) == RESET ){
 			counter++;
-			if(counter==1000000){//150ms
+			if(counter==40000){//150ms
 				Error_Handler();
 				goto exit_error;
 			}
@@ -67,7 +67,7 @@ ErrorStatus Data_transmite_UART_9B (uint8_t mass[], USART_TypeDef *USARTx){
 	counter=0;
 	while( LL_USART_IsActiveFlag_TC( USARTx ) == RESET ){
 		counter++;
-		if(counter==1000000){//150ms
+		if(counter==40000){//150ms
 			Error_Handler();
 			goto exit_error;
 		}
@@ -260,7 +260,7 @@ void Parser_command ( _UART_BUF uart_receive_buffer, _SETTINGS_MODULE *module_se
 	}
 
 	if( transmite_data_flag == 1 ){
-		Data_transmite_UART_9B ( ack_transmite_buf, USARTx);
+		Data_transmite_UART_9B( ack_transmite_buf, USARTx );
 	}
 
 }
