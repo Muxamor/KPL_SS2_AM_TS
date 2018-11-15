@@ -160,12 +160,15 @@ int main(void){
 	
 				if( ADC_PARAM_ptr->DRDY_GOOD_flag != 1 ){ // do not got sync signal
 
+					Error_Handler();
+
 					while(ADC_PARAM_ptr->PULSE_flag == SET);
 
 					ADC_PARAM_ptr->PULSE_flag = 0;
 					CONF_MOD_ptr->status_module = 0x15;
 
 					if(ADC_PARAM_ptr->Count_MCLK  == 8 ){ // counter in interrupt
+						Error_Handler();
 						LED_Yellow_HL1_ON();
 						CONF_MOD_ptr->status_module = 0x1D;
 						ADC_PARAM_ptr->Count_MCLK = 0x00;

@@ -117,6 +117,8 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_ad
 
 	DATA_24_ADC = ( ( (float)raw_data_adc_24b)/16777216.0)*Vref_adc;
 
+	DATA_24_ADC = DATA_24_ADC/1.41; //Hand made coefficient.
+
 	DATA_16_ADC = ((DATA_24_ADC* 65536.0)/Vref_adc);
 
 	if(DATA_16_ADC<0){

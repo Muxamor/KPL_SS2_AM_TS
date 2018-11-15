@@ -284,6 +284,18 @@ void SetupGPIO(void){
 	/*PC7_MCLK_Reset()                	      */
 	/*Define in SetupPeriph.h                     */
 
+
+	/* Configure pins DE-DRDY PC4*/
+	GPIO_InitStruct.Pin = LL_GPIO_PIN_4;
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
+	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_MEDIUM;
+	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+	LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_4);
+
+
 }
 
 void Set_Output_mode_PD2(void){
