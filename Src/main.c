@@ -45,7 +45,7 @@ int main(void){
 	I2C1_Init();
 	PWM_Init(PWM_TIM2_CH2_PA1); //PWM_TIM3_CH1_PA6
 	SetupInterrupt();
-	//MX_IWDG_Init();
+	IWDG_Init();
 	printf("Finish setup periphery. Success! \r\n");
 	
 	//Default configuration board;
@@ -65,6 +65,8 @@ int main(void){
    	CONF_MOD_ptr->format_data_ADC_16b_24b = 0;
 
     printf("Default settings. Success! \r\n");
+
+    LL_IWDG_ReloadCounter(IWDG);
 
 	LED_Yellow_HL1_OFF();
 	LED_Green_HL2_OFF();
@@ -110,8 +112,8 @@ int main(void){
 /***********************************************************/
 
 	while(1){
-		//LL_IWDG_ReloadCounter(IWDG);
 
+		LL_IWDG_ReloadCounter(IWDG);
 		if(CONF_MOD_ptr->counter_toggle_led_hl3 == 128 ){
 			CONF_MOD_ptr->counter_toggle_led_hl3=0;
 			LED_Green_HL3_TOGGLE();
@@ -136,7 +138,7 @@ int main(void){
 
 			}else{ //No Error
 			//	LL_IWDG_ReloadCounter(IWDG);
-				
+				LL_IWDG_ReloadCounter(IWDG);
 				if(CONF_MOD_ptr->format_data_ADC_16b_24b == 0){ //16b format data ADC
 					RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5.0, CONF_MOD_ptr);
 				}
@@ -200,6 +202,7 @@ int main(void){
 			UART1_BUF_ptr->received_command_flag=RESET; //clear flag interrupt
 			UART1_BUF_ptr->UART_rec_buf_len=0;
 
+			LL_IWDG_ReloadCounter(IWDG);
 			if(UART1_BUF_ptr->ADC_data_request_flag == SET){ //get request to sent data ADC
 				UART1_BUF_ptr->ADC_data_request_flag=0; //clear flag interrupt
 				Data_transmite_UART_9B (ADC_data_transmit, USART1);

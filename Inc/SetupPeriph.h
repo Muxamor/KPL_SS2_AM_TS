@@ -25,7 +25,7 @@ void SPI2_Init(void);
 void I2C1_Init(void);
 void PWM_Init(enum PWR_TIMx timer_number);
 void SetupInterrupt(void);
-void MX_IWDG_Init(void);
+void IWDG_Init(void);
 
 /*The table below gives the allowed values of the pre-emption priority and subpriority according
  to the Priority Grouping configuration performed by NVIC_PriorityGroupConfig function

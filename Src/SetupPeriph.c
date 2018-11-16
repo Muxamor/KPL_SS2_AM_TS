@@ -672,7 +672,7 @@ void SetupInterrupt(void){
   * @retval None
 */
 
-void MX_IWDG_Init(void){
+void IWDG_Init(void){
 
     LL_IWDG_Enable(IWDG);
   	LL_IWDG_EnableWriteAccess(IWDG);
