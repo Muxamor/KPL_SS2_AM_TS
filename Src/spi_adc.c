@@ -123,9 +123,9 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 
 	
 	if( config_module->amp_factor_K2 == 10 ){ //K2==1024
-		DATA_24_ADC = DATA_24_ADC * 2;
+		DATA_24_ADC = DATA_24_ADC * 2.0;
 	}else if( config_module->amp_factor_K2 == 11 ){ //K2==2048
-		DATA_24_ADC = DATA_24_ADC * 4;
+		DATA_24_ADC = DATA_24_ADC * 4.0;
 	} 
 
 
