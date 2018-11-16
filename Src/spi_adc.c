@@ -98,12 +98,14 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 		raw_data_adc_24b = raw_data_adc_24b | 0xFF800000; 
 	}
 
+	/*
 	if(config_module->amp_factor_K2 == 10 ){
 		raw_data_adc_24b = raw_data_adc_24b * 2;
 
 	} else if (config_module->amp_factor_K2 == 11){
 		raw_data_adc_24b = raw_data_adc_24b * 4;
 	}
+	*/
 
 	if( raw_data_adc_24b > 8388607 ){
 		raw_data_adc_24b = 8388607;
@@ -120,9 +122,9 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 	DATA_24_ADC = DATA_24_ADC/1.41; //Hand made correction coefficient.
 
 	
-	if( config_module->amp_factor_K2 == 0x0A ){ //K2==1024
+	if( config_module->amp_factor_K2 == 10 ){ //K2==1024
 		DATA_24_ADC = DATA_24_ADC * 2;
-	}else if( config_module->amp_factor_K2 == 0x0B ){ //K2==2048
+	}else if( config_module->amp_factor_K2 == 11 ){ //K2==2048
 		DATA_24_ADC = DATA_24_ADC * 4;
 	} 
 
