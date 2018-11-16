@@ -140,7 +140,7 @@ int main(void){
 			//	LL_IWDG_ReloadCounter(IWDG);
 				LL_IWDG_ReloadCounter(IWDG);
 				if(CONF_MOD_ptr->format_data_ADC_16b_24b == 0){ //16b format data ADC
-					RAW_DATA_16_ADC = convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5.0, CONF_MOD_ptr);
+					RAW_DATA_16_ADC = Math_convert_RAW_data_ADC_24b_to_16b( RAW_DATA_24_ADC, 5.0, CONF_MOD_ptr);
 				}
 
 				if( VALUE_COMP1() == 1 && VALUE_COMP2() == 0 && VALUE_COMP4() == 0){ 

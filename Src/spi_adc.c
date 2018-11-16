@@ -85,7 +85,7 @@ int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx ){
   * @retval 16 bit data ADC 
   */
 
-int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_adc, _SETTINGS_MODULE *config_module ){
+int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_adc, _SETTINGS_MODULE *config_module ){
 
 	//raw_data_adc_24b =  0x800001; //0x7FFFFF;//
 	int16_t RAW_DATA_16_ADC = 0;
@@ -119,8 +119,17 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_ad
 
 	DATA_24_ADC = DATA_24_ADC/1.41; //Hand made correction coefficient.
 
-	DATA_16_ADC = ((DATA_24_ADC* 65536.0)/Vref_adc);
+	
+	if( config_module->amp_factor_K2 == 0x0A ){ //K2==1024
+		DATA_24_ADC = DATA_24_ADC * 2;
+	}else if( config_module->amp_factor_K2 == 0x0B ){ //K2==2048
+		DATA_24_ADC = DATA_24_ADC * 4;
+	} 
 
+
+	DATA_16_ADC = ((DATA_24_ADC * 65536.0)/Vref_adc);
+
+	/*
 	if(DATA_16_ADC<0){
 		if(DATA_16_ADC > -32768){
 			DATA_16_ADC = DATA_16_ADC - 0.55;
@@ -130,7 +139,8 @@ int16_t convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vref_ad
 			DATA_16_ADC = DATA_16_ADC + 0.55;
 		}
 	}
-			
+	*/
+
 	//RAW_DATA_16_ADC = (int16_t)((DATA_24_ADC* 65536)/Vref_adc);
 	RAW_DATA_16_ADC = (int16_t)DATA_16_ADC;
 
