@@ -33,6 +33,8 @@ int main(void){
 	int16_t RAW_DATA_16_ADC = 0;
 	int32_t RAW_DATA_24_ADC = 0;
 	
+	//uint32_t RAW_DATA_24_ADC_unsigned = 0;
+
 	LL_Init();
 	SystemClock_Config(); //Setup system clock at 80 MHz
 	//LL_RCC_GetSystemClocksFreq(CHECK_RCC_CLOCKS); // Only for check setup clock Not need use in release
@@ -60,6 +62,14 @@ int main(void){
     UART1_BUF_ptr->recive_data_permit_flag = 0; 
     UART1_BUF_ptr->received_command_flag = 0;
     UART1_BUF_ptr->ADC_data_request_flag = 0;
+
+    Set_Ficlk_and_F_SAx(1,PWM_TIM2_CH2_PA1);
+    Set_Amp_Factor_K1(0);
+    Set_Amp_Factor_K2(0);
+
+    CONF_MOD_ptr->Fcut_value = 1;
+    CONF_MOD_ptr->amp_factor_K1 = 0;
+    CONF_MOD_ptr->amp_factor_K2 = 0;
 
     //TODO Read settings of module from flash.  
    	CONF_MOD_ptr->format_data_ADC_16b_24b = 0;
@@ -127,8 +137,10 @@ int main(void){
 			ADC_PARAM_ptr->ADC_DRDY_flag=0;
 			RAW_DATA_24_ADC = 0;
 			ADC_data_transmit[0] = 0;
+			//RAW_DATA_24_ADC_unsigned = 0;
 
 			RAW_DATA_24_ADC = SPI_Get_RAW_data_ADC7767( SPI2 ); 
+			//RAW_DATA_24_ADC_unsigned = SPI_Get_RAW_data_ADC7767_unsigned ( SPI2 );
 
 			if(RAW_DATA_24_ADC == -1){ //SPI hardware problem
 

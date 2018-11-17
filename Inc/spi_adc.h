@@ -22,6 +22,7 @@
 
 
 int32_t SPI_Get_RAW_data_ADC7767 ( SPI_TypeDef *SPIx );
+uint32_t SPI_Get_RAW_data_ADC7767_unsigned ( SPI_TypeDef *SPIx );
 
 int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float  Vref_adc, _SETTINGS_MODULE *config_module );
 
