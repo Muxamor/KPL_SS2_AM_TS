@@ -165,80 +165,17 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 		raw_data_adc_24b = raw_data_adc_24b | 0xFF800000; 
 	}
 
-	/*
-	if(config_module->amp_factor_K2 == 10 ){
-		raw_data_adc_24b = raw_data_adc_24b * 2;
-
-	} else if (config_module->amp_factor_K2 == 11){
-		raw_data_adc_24b = raw_data_adc_24b * 4;
-	}
-	*/
-/*
-	if( raw_data_adc_24b > 8388607 ){
-		raw_data_adc_24b = 8388607;
-		config_module->saturation_math_COMP4 = 1;
-		
-	}else if(raw_data_adc_24b < -8388608 ){
-		raw_data_adc_24b = -8388608;
-		config_module->saturation_math_COMP4 = 1;
-
-	}*/
-
-	DATA_24_ADC = ( ( (float)raw_data_adc_24b)/16777216.0)*Vref_adc;
+	DATA_24_ADC = ( ( (float)raw_data_adc_24b) / 16777216.0 ) * Vref_adc;
 
 	DATA_24_ADC = DATA_24_ADC/1.421; //Hand made correction coefficient.
 
-	
+	DATA_16_ADC = ( ( DATA_24_ADC * 65536.0 ) / Vref_adc );
 
-	if( config_module->amp_factor_K2 == 10 ){ //K2==1024
-		DATA_24_ADC = DATA_24_ADC * 1.5;
-	}else if( config_module->amp_factor_K2 == 11 ){ //K2==2048
-		 DATA_24_ADC = DATA_24_ADC * 3.0;
-	} 
-
-	/*
-	if(  DATA_24_ADC > 2.49 ){
-		 DATA_24_ADC = 2.49;
-		config_module->saturation_math_COMP4 = 1;
-
-	}else if(raw_data_adc_24b < 0 ){  // raw_data_adc_24b < -2.49 &&  raw_data_adc_24b < 0
-
-		DATA_24_ADC = (DATA_24_ADC * (-1));
-
-		if(  DATA_24_ADC > 2.49 ){
-			 DATA_24_ADC = 2.49;
-			 config_module->saturation_math_COMP4 = 1;
-		}
-
-		DATA_24_ADC = (DATA_24_ADC * (-1));
-
-	} */
-
-	DATA_16_ADC = (( DATA_24_ADC * 65536.0)/Vref_adc);
-
-/*
-	if(DATA_16_ADC<0){
-		if(DATA_16_ADC > -32768){
-			DATA_16_ADC = -32768;
-			//DATA_16_ADC = DATA_16_ADC - 0.55;
-		}
-	}else{
-		if(DATA_16_ADC < 32767){
-			DATA_16_ADC = 32767;
-			//DATA_16_ADC = DATA_16_ADC + 0.55;
-		}
-	} */
-
-
-	//RAW_DATA_16_ADC = (int16_t)((DATA_24_ADC* 65536)/Vref_adc);
 	RAW_DATA_16_ADC = (int16_t)DATA_16_ADC;
-/*
-	if(RAW_DATA_16_ADC >= 32766 ){
-		DATA_16_ADC = 32767;
-	}else if(DATA_16_ADC <= -32767){
-		DATA_16_ADC = -32768;
+
+	if( RAW_DATA_16_ADC == 32767 ||  DATA_16_ADC == -32768 ){
+		config_module->saturation_math_COMP4 = 1;
 	}
-*/
 
 	#ifdef DEBUGprintf //%.2f
 			int16_t DATA_24_ADC_tens;

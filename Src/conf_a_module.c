@@ -257,6 +257,17 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			PB11_G4_Reset();
 			F_SA2_Set();
 			K2=2048;
+
+			/*
+			uint32_t Counter_TIM_Value;
+			Counter_TIM_Value = SystemCoreClock/10;
+			LL_TIM_DisableCounter(TIM2); // Disable timer for resetup
+			LL_TIM_SetCounter(TIM2, 0);
+			LL_TIM_SetAutoReload(TIM2, Counter_TIM_Value-1);
+			LL_TIM_OC_SetCompareCH2(TIM2, ((Counter_TIM_Value/2)-1));
+			//LL_TIM_OC_EnablePreload(TIM2, LL_TIM_CHANNEL_CH2);
+			LL_TIM_EnableCounter(TIM2); */
+
 			break;
 		default:
 			Error_Handler();
