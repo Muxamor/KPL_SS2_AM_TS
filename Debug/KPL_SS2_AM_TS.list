@@ -11328,7 +11328,7 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 		config_module->saturation_math_COMP4 = 1;
 	}*/
 
-	DATA_24_ADC =  ((float)raw_data_adc_24b)/1.422;
+	DATA_24_ADC =  ((float)raw_data_adc_24b)/1.42;
  8004946:	68fb      	ldr	r3, [r7, #12]
  8004948:	ee07 3a90 	vmov	s15, r3
  800494c:	eef8 7ae7 	vcvt.f32.s32	s15, s15
@@ -11415,8 +11415,8 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
  80049fc:	bd90      	pop	{r4, r7, pc}
  80049fe:	bf00      	nop
  8004a00:	43800000 	.word	0x43800000
- 8004a04:	126e978d 	.word	0x126e978d
- 8004a08:	3ff6c083 	.word	0x3ff6c083
+ 8004a04:	eb851eb8 	.word	0xeb851eb8
+ 8004a08:	3ff6b851 	.word	0x3ff6b851
  8004a0c:	624dd2f2 	.word	0x624dd2f2
  8004a10:	3ff35810 	.word	0x3ff35810
 
