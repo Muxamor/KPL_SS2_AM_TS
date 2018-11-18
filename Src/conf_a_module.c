@@ -233,7 +233,7 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			break;
 		case 9: // Set K2=512
 			PB0_G0_Reset();
-			PB1_G1_Set();
+			PB1_G1_Reset();
 			PB2_G2_Reset();
 			PB10_G3_Set();
 			PB11_G4_Reset();
@@ -241,8 +241,8 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			K2=512;
 			break;
 		case 10: // Set K2=1024
-			PB0_G0_Reset();
-			PB1_G1_Set();
+			PB0_G0_Set();
+			PB1_G1_Reset();
 			PB2_G2_Reset();
 			PB10_G3_Set();
 			PB11_G4_Reset();
