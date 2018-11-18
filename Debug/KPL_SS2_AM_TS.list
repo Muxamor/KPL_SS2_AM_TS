@@ -29,11 +29,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  12 .debug_ranges 00000c20  00000000  00000000  000312d8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_line   000054a0  00000000  00000000  00031ef8  2**0
+ 13 .debug_line   0000549e  00000000  00000000  00031ef8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    00003898  00000000  00000000  00037398  2**0
+ 14 .debug_str    00003898  00000000  00000000  00037396  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .comment      0000007c  00000000  00000000  0003ac30  2**0
+ 15 .comment      0000007c  00000000  00000000  0003ac2e  2**0
                   CONTENTS, READONLY
  16 .debug_frame  00003f50  00000000  00000000  0003acac  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -9673,16 +9673,12 @@ ErrorStatus Set_Amp_Factor_K2(uint8_t namber_value){
 			K2=2048;
  8003f30:	f44f 6300 	mov.w	r3, #2048	; 0x800
  8003f34:	81fb      	strh	r3, [r7, #14]
-			LL_TIM_SetAutoReload(TIM2, Counter_TIM_Value-1);
-			LL_TIM_OC_SetCompareCH2(TIM2, ((Counter_TIM_Value/2)-1));
-			//LL_TIM_OC_EnablePreload(TIM2, LL_TIM_CHANNEL_CH2);
-			LL_TIM_EnableCounter(TIM2);*/
 
 			break;
  8003f36:	e006      	b.n	8003f46 <Set_Amp_Factor_K2+0x34a>
 		default:
 			Error_Handler();
- 8003f38:	f44f 7188 	mov.w	r1, #272	; 0x110
+ 8003f38:	f240 1107 	movw	r1, #263	; 0x107
  8003f3c:	4805      	ldr	r0, [pc, #20]	; (8003f54 <Set_Amp_Factor_K2+0x358>)
  8003f3e:	f7ff fcb1 	bl	80038a4 <_Error_Handler>
 			return ERROR;
@@ -9832,7 +9828,7 @@ ErrorStatus Manual_settings(uint8_t namber_settings, enum PWR_TIMx timer_numberr
 
 		default:
 			Error_Handler();
- 8004014:	f240 1159 	movw	r1, #345	; 0x159
+ 8004014:	f44f 71a8 	mov.w	r1, #336	; 0x150
  8004018:	481b      	ldr	r0, [pc, #108]	; (8004088 <Manual_settings+0x130>)
  800401a:	f7ff fc43 	bl	80038a4 <_Error_Handler>
 			return ERROR;
@@ -9890,7 +9886,7 @@ ErrorStatus Manual_settings(uint8_t namber_settings, enum PWR_TIMx timer_numberr
 
 		default:
 			Error_Handler();
- 8004070:	f44f 71b8 	mov.w	r1, #368	; 0x170
+ 8004070:	f240 1167 	movw	r1, #359	; 0x167
  8004074:	4804      	ldr	r0, [pc, #16]	; (8004088 <Manual_settings+0x130>)
  8004076:	f7ff fc15 	bl	80038a4 <_Error_Handler>
 			return ERROR;
