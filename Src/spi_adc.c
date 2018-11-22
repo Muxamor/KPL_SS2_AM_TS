@@ -181,7 +181,7 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 				config_module->saturation_math_COMP4 = 1;
 	}
 
-	DATA_24_ADC =  ((float)raw_data_adc_24b)/0.896;
+	DATA_24_ADC =  ((float)raw_data_adc_24b)/0.887;
 
 	if(  config_module->amp_factor_K2 == 9 || config_module->amp_factor_K2 == 10 ||  config_module->amp_factor_K2 == 11 ){ //K2=512, 1024, 2048
 		DATA_24_ADC =  ((float)raw_data_adc_24b)/1.209;
@@ -189,12 +189,22 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 
 	DATA_24_ADC = DATA_24_ADC/256.0;
 
+	if( DATA_24_ADC > 32767 ){
+		config_module->saturation_math_COMP4 = 1;
+		DATA_24_ADC = 32767;
+
+	}else if( DATA_24_ADC < 0 ){
+
+		DATA_24_ADC = DATA_24_ADC * (-1);
+		if( DATA_24_ADC > 32768 ){
+			config_module->saturation_math_COMP4 = 1;
+			DATA_24_ADC = 32768;
+		}
+		DATA_24_ADC = DATA_24_ADC * (-1);
+	}
+
 	RAW_DATA_16_ADC = (int16_t)DATA_24_ADC;
 
-
-	if( RAW_DATA_16_ADC == 32767 ||  RAW_DATA_16_ADC == -32768 ){
-			config_module->saturation_math_COMP4 = 1;
-	}
 
 	#ifdef DEBUGprintf //%.2f
 			int16_t DATA_24_ADC_tens;
