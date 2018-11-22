@@ -33,6 +33,9 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
 	if(Fcut == 10){
 		Ficlk = 1300;//Hz
 		
+	}else if(Fcut == 700){
+		Ficlk = 91000;//Hz
+
 	}else if(Fcut >= 1270){
 		Ficlk = 130000;//Hz
 
