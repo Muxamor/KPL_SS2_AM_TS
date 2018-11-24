@@ -181,7 +181,7 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
 				config_module->saturation_math_COMP4 = 1;
 	}
 
-	DATA_24_ADC =  ((float)raw_data_adc_24b)/0.887;
+	DATA_24_ADC =  ((float)raw_data_adc_24b)/0.894;
 
 	if(  config_module->amp_factor_K2 == 9 || config_module->amp_factor_K2 == 10 ||  config_module->amp_factor_K2 == 11 ){ //K2=512, 1024, 2048
 		DATA_24_ADC =  ((float)raw_data_adc_24b)/1.209;

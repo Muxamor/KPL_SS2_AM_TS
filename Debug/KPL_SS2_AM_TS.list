@@ -8981,7 +8981,7 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
  80039d6:	697b      	ldr	r3, [r7, #20]
  80039d8:	f5b3 7f2f 	cmp.w	r3, #700	; 0x2bc
  80039dc:	d102      	bne.n	80039e4 <Set_Ficlk_and_F_SAx+0x38>
-		Ficlk = 127000;//Hz
+		Ficlk = 2000000;//Hz
  80039de:	4b4e      	ldr	r3, [pc, #312]	; (8003b18 <Set_Ficlk_and_F_SAx+0x16c>)
  80039e0:	613b      	str	r3, [r7, #16]
  80039e2:	e01f      	b.n	8003a24 <Set_Ficlk_and_F_SAx+0x78>
@@ -8991,7 +8991,7 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
  80039e6:	f240 42f5 	movw	r2, #1269	; 0x4f5
  80039ea:	4293      	cmp	r3, r2
  80039ec:	d902      	bls.n	80039f4 <Set_Ficlk_and_F_SAx+0x48>
-		Ficlk = 130000;//Hz
+		Ficlk = 500000;//Hz
  80039ee:	4b4b      	ldr	r3, [pc, #300]	; (8003b1c <Set_Ficlk_and_F_SAx+0x170>)
  80039f0:	613b      	str	r3, [r7, #16]
  80039f2:	e017      	b.n	8003a24 <Set_Ficlk_and_F_SAx+0x78>
@@ -9158,8 +9158,8 @@ ErrorStatus Set_Ficlk_and_F_SAx(uint8_t par_value, enum PWR_TIMx timer_number){
  8003b12:	3718      	adds	r7, #24
  8003b14:	46bd      	mov	sp, r7
  8003b16:	bd80      	pop	{r7, pc}
- 8003b18:	0001f018 	.word	0x0001f018
- 8003b1c:	0001fbd0 	.word	0x0001fbd0
+ 8003b18:	001e8480 	.word	0x001e8480
+ 8003b1c:	0007a120 	.word	0x0007a120
  8003b20:	51eb851f 	.word	0x51eb851f
  8003b24:	2000000c 	.word	0x2000000c
  8003b28:	40000400 	.word	0x40000400
@@ -11351,7 +11351,7 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
  800496a:	715a      	strb	r2, [r3, #5]
 	}
 
-	DATA_24_ADC =  ((float)raw_data_adc_24b)/0.887;
+	DATA_24_ADC =  ((float)raw_data_adc_24b)/0.894;
  800496c:	68fb      	ldr	r3, [r7, #12]
  800496e:	ee07 3a90 	vmov	s15, r3
  8004972:	eef8 7ae7 	vcvt.f32.s32	s15, s15
@@ -11470,8 +11470,8 @@ int16_t Math_convert_RAW_data_ADC_24b_to_16b( int32_t raw_data_adc_24b, float Vr
  8004a68:	bd90      	pop	{r4, r7, pc}
  8004a6a:	bf00      	nop
  8004a6c:	f3af 8000 	nop.w
- 8004a70:	d2f1a9fc 	.word	0xd2f1a9fc
- 8004a74:	3fec624d 	.word	0x3fec624d
+ 8004a70:	e353f7cf 	.word	0xe353f7cf
+ 8004a74:	3fec9ba5 	.word	0x3fec9ba5
  8004a78:	624dd2f2 	.word	0x624dd2f2
  8004a7c:	3ff35810 	.word	0x3ff35810
  8004a80:	007fffff 	.word	0x007fffff
